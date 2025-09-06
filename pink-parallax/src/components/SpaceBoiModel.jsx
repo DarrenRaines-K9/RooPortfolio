@@ -48,32 +48,48 @@ function Loader() {
 
 export default function SpaceBoiModel() {
   return (
-    <Canvas style={{ width: "800px", height: "clamp(400px, 60vh, 800px)" }}>
-      <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+    <div
+      style={{
+        padding: "2rem",
+        width: "100%",
+        maxWidth: "600px",
+        margin: "0 auto",
+      }}
+    >
+      <Canvas
+        style={{
+          width: "600px",
+          height: "800px",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          borderRadius: "8px",
+        }}
+      >
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} />
 
-      {/* Lighting */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <pointLight position={[-10, -10, -5]} intensity={0.5} />
+        {/* Lighting */}
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} />
 
-      {/* Environment for reflections */}
-      <Environment preset="studio" />
+        {/* Environment for reflections */}
+        <Environment preset="studio" />
 
-      {/* 3D Model with Suspense for loading */}
-      <Suspense fallback={null}>
-        <SpaceBoi />
-      </Suspense>
+        {/* 3D Model with Suspense for loading */}
+        <Suspense fallback={null}>
+          <SpaceBoi />
+        </Suspense>
 
-      {/* Orbit Controls for interaction */}
-      <OrbitControls
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={2}
-        maxDistance={10}
-        autoRotate={false}
-      />
-    </Canvas>
+        {/* Orbit Controls for interaction */}
+        <OrbitControls
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={true}
+          minDistance={2}
+          maxDistance={10}
+          autoRotate={false}
+        />
+      </Canvas>
+    </div>
   );
 }
 
