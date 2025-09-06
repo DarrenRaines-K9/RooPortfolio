@@ -25,4 +25,4 @@ pnpm-debug.log*
 
 
 # hide image assets
-public/assets/images/
+public/images/
