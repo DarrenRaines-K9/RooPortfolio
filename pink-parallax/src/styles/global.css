@@ -1,5 +1,9 @@
+/* global.css: This file contains the global styles for the entire application,
+   including theme variables, base typography, layout for main content,
+   and styling for the header, navigation, and theme toggle. */
 /* Basic styles for light and dark mode */
 :root {
+  /* CSS variables for light mode theme, spacing, typography, and shadows. */
   --color-text: #333;
   --color-background: #fff;
   --color-primary: #22aa07;
@@ -18,18 +22,22 @@
   --border-radius-md: 8px;
   --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow for main content */
 }
 
 html[data-theme='dark'] {
+  /* Overrides for dark mode, adjusting text, background, primary, and accent colors. */
   --color-text: #e0e0e0; /* Lighter text for dark background */
   --color-background: #1a1a1a; /* Darker background */
   --color-primary: #0bd77b;
   --color-accent: #08a360; /* A slightly darker shade for accents in dark mode */
   --box-shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.05);
   --box-shadow-md: 0 4px 6px rgba(255, 255, 255, 0.08);
+  --box-shadow-lg: 0 5px 5px rgba(245, 239, 239, 0.283); /* Enhanced shadow for dark mode */
 }
 
 body {
+  /* Base styles for the body, including font, line height, colors, and anti-aliasing. */
   font-family: 'Inter', sans-serif; /* Using a modern sans-serif font, assuming it will be imported later */
   font-size: var(--font-size-base);
   line-height: 1.6;
@@ -44,25 +52,30 @@ body {
 }
 
 main {
+  /* Styling for the main content area, including layout, max-width, padding, and shadows. */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   max-width: 800px; /* Adjust as needed */
   margin-inline: auto; /* Modern way to center block elements */
+  margin-top: var(--spacing-xl); /* Add gap from navbar */
   padding: var(--spacing-lg);
-  box-shadow: var(--box-shadow-md); /* Add a subtle shadow for depth */
+  box-shadow: var(--box-shadow-lg); /* Enhanced shadow for depth */
   border-radius: var(--border-radius-md);
   background-color: var(--color-background); /* Ensure main has background for shadow */
+  border: 2px solid limegreen; /* Added lime green border as requested */
 }
 
 h1 {
+  /* Styling for primary headings. */
   color: var(--color-primary);
   font-size: var(--font-size-h1);
   margin-bottom: var(--spacing-md);
 }
 
 a {
+  /* Base styling for links. */
   color: var(--color-primary);
   text-decoration: none;
 }
@@ -72,6 +85,7 @@ a:hover {
 }
 
 /* Navbar Styling */
+/* Styles for the main header, including layout, background, and sticky positioning. */
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -93,6 +107,7 @@ html[data-theme='dark'] .main-header {
 }
 
 .site-branding .site-title {
+  /* Styling for the site title within the header. */
   font-size: var(--font-size-xl);
   font-weight: bold;
   color: var(--color-text); /* Use theme text color */
@@ -105,6 +120,7 @@ html[data-theme='dark'] .main-header {
 }
 
 .main-nav .nav-list {
+  /* Styling for the navigation list within the main navigation. */
   display: flex;
   list-style: none;
   margin: 0;
@@ -120,6 +136,7 @@ html[data-theme='dark'] .main-header {
 }
 
 .main-nav .nav-link {
+  /* Styling for individual navigation links. */
   color: var(--color-text); /* Use theme text color */
   text-decoration: none;
   font-weight: 500;
@@ -150,11 +167,13 @@ html[data-theme='dark'] .main-header {
 }
 
 .nav-actions {
+  /* Container for navigation actions, such as the theme toggle and hamburger menu. */
   display: flex;
   align-items: center;
 }
 
 /* Hamburger Menu Icon */
+/* Styling for the hamburger menu button, hidden by default on larger screens. */
 .hamburger-menu {
   display: none; /* Hidden by default on large screens */
   background: none;
@@ -177,6 +196,7 @@ html[data-theme='dark'] .main-header {
 }
 
 .hamburger-menu .bar {
+  /* Styling for the individual bars within the hamburger menu icon. */
   display: block;
   width: 25px;
   height: 3px;
@@ -186,6 +206,7 @@ html[data-theme='dark'] .main-header {
 }
 
 /* Media Query for Small Screens */
+/* Responsive adjustments for screens up to 768px wide, primarily for the navigation menu. */
 @media (max-width: 768px) {
   .main-nav {
     display: none; /* Hide main nav by default on small screens */

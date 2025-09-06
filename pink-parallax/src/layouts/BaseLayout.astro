@@ -1,15 +1,19 @@
 ---
+// BaseLayout.astro: This layout component provides the fundamental HTML structure for all pages.
+// It includes meta tags, font imports, a header with navigation and theme toggle, and a main content area.
+
 interface Props {
-  title: string;
+  title: string; // Defines the title property for the page.
 }
 
-const { title } = Astro.props;
+const { title } = Astro.props; // Extracts the title from Astro's props.
 
-import ThemeToggle from "../components/ThemeToggle.astro";
-import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle.astro"; // Imports the theme toggle component.
+import "../styles/global.css"; // Imports global styles for the application.
 ---
 
 <html lang="en">
+  <!-- The main HTML document structure. -->
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -24,6 +28,7 @@ import "../styles/global.css";
     />
   </head>
   <body>
+    <!-- The body contains the main content, header, and scripts. -->
     <header class="main-header">
       <div class="site-branding">
         <a href="/" class="site-title">Spaced Out</a>
@@ -50,5 +55,6 @@ import "../styles/global.css";
       <slot />
     </main>
     <script src="../scripts/navbar.js"></script>
+    <!-- Imports the JavaScript for handling navigation interactions. -->
   </body>
 </html>
