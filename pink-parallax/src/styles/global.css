@@ -119,6 +119,12 @@ html[data-theme='dark'] .main-header {
   color: var(--color-primary);
 }
 
+.site-branding .site-logo {
+  height: 100px; /* Increased logo height by another 30% */
+  margin: 0; /* Reduced padding around the image to 0 */
+  padding: 0%; /* Reduced padding around the image to 0 */
+}
+
 .main-nav .nav-list {
   /* Styling for the navigation list within the main navigation. */
   display: flex;
