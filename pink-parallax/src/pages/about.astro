@@ -7,5 +7,69 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
 <BaseLayout title="About Me">
   <h1>About Me</h1>
   <p>Hi, I'm [Your Name]! This is where I'll tell you a bit about myself.</p>
+
+  <section class="photo-gallery container-secondary">
+    <h2>Photo Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item container-card">
+        <img src="/images/DSC_0644.jpg" alt="Photo 1" loading="lazy" />
+      </div>
+      <div class="gallery-item container-card">
+        <img src="/images/IMG_0291.JPG" alt="Photo 2" loading="lazy" />
+      </div>
+      <div class="gallery-item container-card">
+        <img src="/images/IMG_7895.jpeg" alt="Photo 3" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
   <a href="/">Back to Home</a>
 </BaseLayout>
+
+<style>
+  .photo-gallery {
+    margin-top: var(--spacing-xl);
+    width: 100%;
+  }
+
+  .photo-gallery h2 {
+    color: var(--color-primary);
+    font-size: var(--font-size-h2);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-item img {
+      height: 250px;
+    }
+  }
+</style>
