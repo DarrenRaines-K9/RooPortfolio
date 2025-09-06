@@ -6,6 +6,7 @@ interface Props {
 const { title } = Astro.props;
 
 import ThemeToggle from "../components/ThemeToggle.astro";
+import NorthernLightsThreeJS from "../components/NorthernLightsThreeJS.astro";
 import "../styles/global.css";
 ---
 
@@ -18,9 +19,10 @@ import "../styles/global.css";
     <title>{title}</title>
   </head>
   <body>
+    <NorthernLightsThreeJS />
     <header class="main-header">
       <div class="site-branding">
-        <a href="/" class="site-title">Your Site Name</a>
+        <a href="/" class="site-title">Spaced Out</a>
         <!-- Optional: Add an image logo here -->
         <!-- <img src="/path/to/your/logo.svg" alt="Your Site Logo" class="site-logo" /> -->
       </div>
