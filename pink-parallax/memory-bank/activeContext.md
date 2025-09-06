@@ -18,3 +18,9 @@ This file tracks the project's current status, including recent changes, current
 -
 
 [2025-09-06 15:47:47] - Removed the "northernlights" concept and all related files as per user's request.
+
+[2025-09-06 16:08:07] - Current Focus: Implementing an interactive 3D 'Space Boi' model on the homepage using Three.js.
+
+[2025-09-06 16:18:44] - Current Focus: Reverted SpaceBoi3D implementation per user request. All related files and dependencies removed.
+
+[2025-09-06 21:26:44] - Current Focus: Successfully implemented interactive 3D 'Space Boi' model on homepage using React Three Fiber (@react-three/fiber) with Drei mesh controls (@react-three/drei). Model includes OrbitControls for user interaction, proper lighting, and loading states.

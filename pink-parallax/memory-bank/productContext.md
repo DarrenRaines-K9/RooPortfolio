@@ -16,3 +16,5 @@ This file provides a high-level overview of the project and the expected product
 ## Overall Architecture
 
 -
+
+[2025-09-06 16:18:24] - Removed "Interactive 3D 'Space Boi' model on homepage with zoom and rotation capabilities" from Key Features - implementation reverted per user request.

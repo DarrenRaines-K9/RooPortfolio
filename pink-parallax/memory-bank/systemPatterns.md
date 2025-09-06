@@ -17,3 +17,5 @@ It is optional, but recommended to be updated as the project evolves.
 ## Testing Patterns
 
 -
+
+[2025-09-06 16:19:21] - Removed 3D Model Integration pattern - implementation was reverted per user request.

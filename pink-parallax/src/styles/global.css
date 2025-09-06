@@ -3,7 +3,7 @@
    and styling for the header, navigation, and theme toggle. */
 /* Basic styles for light and dark mode */
 :root {
-  /* CSS variables for light mode theme, spacing, typography, and shadows. */
+  /* CSS variables for light mode theme, spacing, typography, and enhanced shadows. */
   --color-text: #333;
   --color-background: #fff;
   --color-primary: #22aa07;
@@ -20,9 +20,12 @@
   --font-size-h2: 2rem;
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
-  --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow for main content */
+  /* Enhanced Shadow System - Light Mode */
+  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --box-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.18);
+  --box-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.25);
+  --box-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
+  --box-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
 html[data-theme='dark'] {
@@ -31,9 +34,12 @@ html[data-theme='dark'] {
   --color-background: #1a1a1a; /* Darker background */
   --color-primary: #0bd77b;
   --color-accent: #08a360; /* A slightly darker shade for accents in dark mode */
-  --box-shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.05);
-  --box-shadow-md: 0 4px 6px rgba(255, 255, 255, 0.08);
-  --box-shadow-lg: 0 5px 5px rgba(245, 239, 239, 0.283); /* Enhanced shadow for dark mode */
+  /* Enhanced Shadow System - Dark Mode (using black for better contrast) */
+  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --box-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --box-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.6);
+  --box-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.7);
+  --box-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
 body {
@@ -52,7 +58,7 @@ body {
 }
 
 main {
-  /* Styling for the main content area, including layout, max-width, padding, and shadows. */
+  /* Styling for the main content area, including layout, max-width, padding, and enhanced shadows. */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,7 +67,7 @@ main {
   margin-inline: auto; /* Modern way to center block elements */
   margin-top: var(--spacing-xl); /* Add gap from navbar */
   padding: var(--spacing-lg);
-  box-shadow: var(--box-shadow-lg); /* Enhanced shadow for depth */
+  box-shadow: var(--box-shadow-xl); /* Strongest shadow for main content */
   border-radius: var(--border-radius-md);
   background-color: var(--color-background); /* Ensure main has background for shadow */
   border: 2px solid limegreen; /* Added lime green border as requested */
@@ -93,7 +99,7 @@ a:hover {
   padding: var(--spacing-md) var(--spacing-xl);
   background-color: transparent; /* Allow Three.js canvas to show through */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle separator */
-  box-shadow: var(--box-shadow-sm);
+  box-shadow: var(--box-shadow-md); /* Enhanced shadow for better depth */
   backdrop-filter: blur(5px); /* Modern frosted glass effect */
   -webkit-backdrop-filter: blur(5px);
   position: sticky; /* Make header sticky */
@@ -254,4 +260,62 @@ html[data-theme='dark'] .main-header {
   .hamburger-menu {
     display: block; /* Show hamburger on small screens */
   }
+}
+
+
+/* Enhanced Container Shadow Classes */
+/* Utility classes for different container types with intensified shadows */
+
+.container-primary {
+  /* Main content containers - strongest shadow */
+  box-shadow: var(--box-shadow-xl);
+}
+
+.container-secondary {
+  /* Section containers like space-boi-section */
+  box-shadow: var(--box-shadow-lg);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.container-card {
+  /* Card-style containers */
+  box-shadow: var(--box-shadow-md);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+}
+
+.container-elevated {
+  /* Special highlighted containers */
+  box-shadow: var(--box-shadow-xl);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background);
+  padding: var(--spacing-xl);
+  border: 2px solid var(--color-primary);
+}
+
+.container-subtle {
+  /* Minimally elevated containers */
+  box-shadow: var(--box-shadow-xs);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-background);
+  padding: var(--spacing-sm);
+}
+
+/* Hover effects for interactive containers */
+.container-card:hover,
+.container-secondary:hover {
+  box-shadow: var(--box-shadow-lg);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.container-elevated:hover {
+  box-shadow: var(--box-shadow-xl);
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
 }

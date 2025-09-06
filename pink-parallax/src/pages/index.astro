@@ -2,9 +2,37 @@
 // index.astro: This is the main home page of the portfolio website.
 // It uses the BaseLayout for consistent page structure.
 import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
+import SpaceBoiModel from "../components/SpaceBoiModel.jsx"; // Import the 3D model component
 ---
 
 <BaseLayout title="Home">
   <h1>Welcome to my Portfolio!</h1>
-  <p>This is the home page.</p>
+  <section class="space-boi-section">
+    <h2>Meet Space Boi</h2>
+    <SpaceBoiModel client:load />
+  </section>
 </BaseLayout>
+
+<style>
+  .space-boi-section {
+    /* Enhanced styling with new shadow system */
+    box-shadow: var(--box-shadow-lg);
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-background);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .space-boi-section:hover {
+    box-shadow: var(--box-shadow-xl);
+    transform: translateY(-2px);
+  }
+
+  .space-boi-section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+  }
+</style>
