@@ -1,0 +1,52 @@
+---
+// No Astro component script needed for this simple toggle
+---
+
+<button id="theme-toggle">Toggle Dark Mode</button>
+
+<script is:inline>
+  const themeToggle = document.getElementById("theme-toggle");
+  const html = document.documentElement;
+
+  // Function to set the theme
+  function setTheme(theme) {
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  // Check for saved theme preference or system preference
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    setTheme("dark");
+  } else {
+    setTheme("light");
+  }
+
+  // Toggle theme on button click
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = html.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+  });
+</script>
+
+<style>
+  button {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-primary);
+    background-color: var(--color-background);
+    color: var(--color-primary);
+    cursor: pointer;
+    border-radius: 5px;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+  }
+</style>

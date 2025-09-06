@@ -1,0 +1,158 @@
+/* Basic styles for light and dark mode */
+:root {
+  --color-text: #333;
+  --color-background: #fff;
+  --color-primary: #22aa07;
+}
+
+html[data-theme='dark'] {
+  --color-text: #eee;
+  --color-background: #333;
+  --color-primary: #0bd77b;
+}
+
+body {
+  font-family: sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: var(--color-primary);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Navbar Styling */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--color-background); /* Use theme background */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle separator */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme='dark'] .main-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+.site-branding .site-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-text); /* Use theme text color */
+  text-decoration: none;
+}
+
+.main-nav .nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav .nav-list li {
+  margin-right: 1.5rem;
+}
+
+.main-nav .nav-list li:last-child {
+  margin-right: 0;
+}
+
+.main-nav .nav-link {
+  color: var(--color-text); /* Use theme text color */
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.main-nav .nav-link:hover {
+  color: var(--color-primary); /* Highlight on hover */
+  text-decoration: none;
+}
+
+/* Optional: Underline effect on hover */
+.main-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease-out;
+}
+
+.main-nav .nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger Menu Icon */
+.hamburger-menu {
+  display: none; /* Hidden by default on large screens */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.hamburger-menu .bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--color-text);
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+  .main-nav {
+    display: none; /* Hide main nav by default on small screens */
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* Adjust based on header height */
+    left: 0;
+    width: 100%;
+    background-color: var(--color-background);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+  }
+
+  .main-nav.is-open { /* Class toggled by JavaScript */
+    display: flex;
+  }
+
+  .main-nav .nav-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main-nav .nav-list li {
+    margin: 0.5rem 0;
+  }
+
+  .hamburger-menu {
+    display: block; /* Show hamburger on small screens */
+  }
+}
