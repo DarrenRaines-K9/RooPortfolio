@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
-      navMenu.classList.toggle('is-open');
-      // Optional: Add animation for hamburger icon
-      hamburger.classList.toggle('active');
+      const isOpen = navMenu.classList.toggle('is-open');
+      hamburger.classList.toggle('active', isOpen); // Toggle 'active' class based on 'is-open'
+      hamburger.setAttribute('aria-expanded', isOpen); // Update aria-expanded attribute
     });
   }
 });

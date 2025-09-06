@@ -3,21 +3,44 @@
   --color-text: #333;
   --color-background: #fff;
   --color-primary: #22aa07;
+  --color-accent: #1a7a06; /* A slightly darker shade for accents */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-h1: 2.5rem;
+  --font-size-h2: 2rem;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 html[data-theme='dark'] {
-  --color-text: #eee;
-  --color-background: #333;
+  --color-text: #e0e0e0; /* Lighter text for dark background */
+  --color-background: #1a1a1a; /* Darker background */
   --color-primary: #0bd77b;
+  --color-accent: #08a360; /* A slightly darker shade for accents in dark mode */
+  --box-shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.05);
+  --box-shadow-md: 0 4px 6px rgba(255, 255, 255, 0.08);
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif; /* Using a modern sans-serif font, assuming it will be imported later */
+  font-size: var(--font-size-base);
+  line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-background);
   transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
-  padding: 20px;
+  padding: var(--spacing-lg);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 main {
@@ -26,12 +49,17 @@ main {
   align-items: center;
   justify-content: center;
   max-width: 800px; /* Adjust as needed */
-  margin: 0 auto; /* Center the main content block */
-  padding: 20px;
+  margin-inline: auto; /* Modern way to center block elements */
+  padding: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md); /* Add a subtle shadow for depth */
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background); /* Ensure main has background for shadow */
 }
 
 h1 {
   color: var(--color-primary);
+  font-size: var(--font-size-h1);
+  margin-bottom: var(--spacing-md);
 }
 
 a {
@@ -48,22 +76,32 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: var(--spacing-md) var(--spacing-xl);
   background-color: transparent; /* Allow Three.js canvas to show through */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle separator */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow-sm);
+  backdrop-filter: blur(5px); /* Modern frosted glass effect */
+  -webkit-backdrop-filter: blur(5px);
+  position: sticky; /* Make header sticky */
+  top: 0;
+  z-index: 100;
 }
 
 html[data-theme='dark'] .main-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+  box-shadow: var(--box-shadow-sm);
 }
 
 .site-branding .site-title {
-  font-size: 1.5rem;
+  font-size: var(--font-size-xl);
   font-weight: bold;
   color: var(--color-text); /* Use theme text color */
   text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.site-branding .site-title:hover {
+  color: var(--color-primary);
 }
 
 .main-nav .nav-list {
@@ -74,7 +112,7 @@ html[data-theme='dark'] .main-header {
 }
 
 .main-nav .nav-list li {
-  margin-right: 1.5rem;
+  margin-right: var(--spacing-lg);
 }
 
 .main-nav .nav-list li:last-child {
@@ -85,8 +123,9 @@ html[data-theme='dark'] .main-header {
   color: var(--color-text); /* Use theme text color */
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 0;
+  padding: var(--spacing-sm) 0;
   position: relative;
+  transition: color 0.3s ease;
 }
 
 .main-nav .nav-link:hover {
@@ -121,9 +160,20 @@ html[data-theme='dark'] .main-header {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
-  margin-left: 1rem;
+  padding: var(--spacing-xs);
+  margin-left: var(--spacing-md);
   z-index: 1000; /* Ensure it's above other content */
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.3s ease;
+}
+
+.hamburger-menu:hover {
+  background-color: rgba(var(--color-primary), 0.1); /* Subtle hover effect */
+}
+
+.hamburger-menu:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .hamburger-menu .bar {
@@ -141,12 +191,24 @@ html[data-theme='dark'] .main-header {
     display: none; /* Hide main nav by default on small screens */
     flex-direction: column;
     position: absolute;
-    top: 60px; /* Adjust based on header height */
+    top: 100%; /* Position below the header */
     left: 0;
     width: 100%;
     background-color: var(--color-background);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 1rem 0;
+    box-shadow: var(--box-shadow-md);
+    padding: var(--spacing-md) 0;
+    border-bottom-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+    overflow: hidden; /* Hide content that might overflow during transition */
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .main-nav.is-open { /* Class toggled by JavaScript */
+    max-height: 300px; /* Arbitrary max-height, adjust as needed */
+    opacity: 1;
+    display: flex; /* Ensure it's flex when open */
   }
 
   .main-nav.is-open { /* Class toggled by JavaScript */
@@ -159,7 +221,7 @@ html[data-theme='dark'] .main-header {
   }
 
   .main-nav .nav-list li {
-    margin: 0.5rem 0;
+    margin: var(--spacing-sm) 0;
   }
 
   .hamburger-menu {

@@ -82,16 +82,29 @@
   #theme-toggle {
     background: none;
     cursor: pointer;
-    color: var(--color-primary); /* Use primary color for icons */
+    color: var(--color-text); /* Use text color for icons */
     padding: 8px; /* Added padding to restore visual size and potential border effect */
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s ease;
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease;
+    border: 1px solid transparent; /* Add a subtle border for definition */
+    border-radius: var(--border-radius-sm);
   }
 
   #theme-toggle:hover {
-    color: var(--color-accent); /* Optional: change color on hover */
+    color: var(--color-primary); /* Highlight on hover */
+    background-color: rgba(
+      var(--color-primary),
+      0.1
+    ); /* Subtle background on hover */
+  }
+
+  #theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   .theme-icon {
