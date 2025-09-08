@@ -3,11 +3,9 @@
 // It uses the BaseLayout for consistent page structure.
 import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
 import PlantBackground from "../components/PlantBackground.jsx"; // Imports the plant background component.
-import SimpleThreeTest from "../components/SimpleThreeTest.jsx"; // Minimal Three.js test
 ---
 
 <BaseLayout title="Projects">
-  <SimpleThreeTest client:load />
   <PlantBackground client:load />
   <div class="projects-container">
     <div class="projects-content">

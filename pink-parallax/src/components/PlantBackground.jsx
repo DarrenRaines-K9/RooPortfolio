@@ -40,8 +40,8 @@ function PlantModel() {
     <primitive
       ref={meshRef}
       object={scene}
-      scale={[2, 2, 2]}
-      position={[0, -1, 0]}
+      scale={[1, 2, 2]}
+      position={[0, -2, 3]}
     />
   );
 }
@@ -51,27 +51,57 @@ function Loader() {
 }
 
 export default function PlantBackground() {
+  const containerRef = useRef(null);
+
+  React.useEffect(() => {
+    const updatePosition = () => {
+      const mainContainer = document.querySelector("main");
+
+      if (mainContainer && containerRef.current) {
+        const rect = mainContainer.getBoundingClientRect();
+        const containerElement = containerRef.current;
+
+        // Position the plant background to match the main container
+        containerElement.style.position = "absolute";
+        containerElement.style.top = `${rect.top + window.scrollY}px`;
+        containerElement.style.left = `${rect.left + window.scrollX}px`;
+        containerElement.style.width = `${rect.width}px`;
+        containerElement.style.height = `${rect.height}px`;
+      }
+    };
+
+    // Initial positioning
+    updatePosition();
+
+    // Update position on scroll and resize
+    window.addEventListener("scroll", updatePosition);
+    window.addEventListener("resize", updatePosition);
+
+    // Cleanup listeners
+    return () => {
+      window.removeEventListener("scroll", updatePosition);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       style={{
-        position: "fixed",
+        position: "absolute",
         top: 0,
         left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: -1,
+        width: "100%",
+        height: "100%",
+        zIndex: 2,
         overflow: "hidden",
+        pointerEvents: "none", // Allow clicks to pass through
+        borderRadius: "8px", // Match the main container's border radius
       }}
     >
       <Canvas>
-        {/* Simple lighting like the working test */}
+        {/* Simple lighting */}
         <ambientLight intensity={1} />
-
-        {/* Test: Bright green cube should be visible */}
-        <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshBasicMaterial color="#00ff00" />
-        </mesh>
 
         {/* 3D Plant Model */}
         <Suspense fallback={<Loader />}>
