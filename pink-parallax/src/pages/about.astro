@@ -12,13 +12,19 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
     <h2>Photo Gallery</h2>
     <div class="gallery-grid">
       <div class="gallery-item container-card">
-        <img src="/images/DSC_0644.jpg" alt="Photo 1" loading="lazy" />
+        <a href="/images/DSC_0644.jpg" class="lightbox-trigger">
+          <img src="/images/DSC_0644.jpg" alt="Photo 1" loading="lazy" />
+        </a>
       </div>
       <div class="gallery-item container-card">
-        <img src="/images/IMG_0291.JPG" alt="Photo 2" loading="lazy" />
+        <a href="/images/IMG_0291.JPG" class="lightbox-trigger">
+          <img src="/images/IMG_0291.JPG" alt="Photo 2" loading="lazy" />
+        </a>
       </div>
       <div class="gallery-item container-card">
-        <img src="/images/IMG_7895.jpeg" alt="Photo 3" loading="lazy" />
+        <a href="/images/IMG_7895.jpeg" class="lightbox-trigger">
+          <img src="/images/IMG_7895.jpeg" alt="Photo 3" loading="lazy" />
+        </a>
       </div>
     </div>
   </section>
@@ -26,9 +32,45 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
   <a href="/">Back to Home</a>
 </BaseLayout>
 
+<div id="lightbox" class="lightbox">
+  <span class="close-button">&times;</span>
+  <img class="lightbox-content" id="lightbox-img" />
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const closeButton = document.querySelector(".close-button");
+  const galleryItems = document.querySelectorAll(".lightbox-trigger");
+
+  if (lightbox && lightboxImg && closeButton) {
+    galleryItems.forEach((item) => {
+      item.addEventListener(
+        "click",
+        function (this: HTMLAnchorElement, e: Event) {
+          e.preventDefault();
+          lightbox.style.display = "flex";
+          (lightboxImg as HTMLImageElement).src = this.href;
+        }
+      );
+    });
+
+    closeButton.addEventListener("click", function () {
+      lightbox.style.display = "none";
+    });
+
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox) {
+        lightbox.style.display = "none";
+      }
+    });
+  }
+</script>
+
 <style>
   .photo-gallery {
-    margin-top: var(--spacing-xl);
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm);
     width: 100%;
   }
 
@@ -71,5 +113,47 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
     .gallery-item img {
       height: 250px;
     }
+  }
+</style>
+
+<style is:global>
+  .lightbox {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: var(--border-radius-md);
+  }
+
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .close-button:hover,
+  .close-button:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
   }
 </style>
