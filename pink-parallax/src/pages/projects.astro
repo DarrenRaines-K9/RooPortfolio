@@ -2,14 +2,44 @@
 // projects.astro: This page lists and describes various projects.
 // It uses the BaseLayout for consistent page structure.
 import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
+import PlantBackground from "../components/PlantBackground.jsx"; // Imports the plant background component.
+import SimpleThreeTest from "../components/SimpleThreeTest.jsx"; // Minimal Three.js test
 ---
 
 <BaseLayout title="Projects">
-  <h1>My Projects</h1>
-  <p>Here are some of the projects I've worked on:</p>
-  <ul>
-    <li>Project 1: A brief description.</li>
-    <li>Project 2: Another cool project.</li>
-  </ul>
-  <a href="/">Back to Home</a>
+  <SimpleThreeTest client:load />
+  <PlantBackground client:load />
+  <div class="projects-container">
+    <div class="projects-content">
+      <h1>My Projects</h1>
+      <p>Here are some of the projects I've worked on:</p>
+      <ul>
+        <li>Project 1: A brief description.</li>
+        <li>Project 2: Another cool project.</li>
+      </ul>
+      <a href="/">Back to Home</a>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .projects-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: var(--spacing-lg);
+  }
+
+  .projects-content {
+    padding: var(--spacing-xl);
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--box-shadow-lg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  html[data-theme="dark"] .projects-content {
+    background: rgba(26, 26, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>
