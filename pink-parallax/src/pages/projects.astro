@@ -1,43 +1,63 @@
 ---
-// projects.astro: This page lists and describes various projects.
-// It uses the BaseLayout for consistent page structure.
-import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
-import PlantBackground from "../components/PlantBackground.jsx"; // Imports the plant background component.
+// projects.astro: This page lists and describes various projects
+// It uses the BaseLayout for consistent page structure and PlantBackground for 3D visual effects
+import BaseLayout from "../layouts/BaseLayout.astro"; // Base layout wrapper with common structure
+import PlantBackground from "../components/PlantBackground.jsx"; // Three.js animated plant background
 ---
 
+<!-- Main page wrapper using BaseLayout component -->
 <BaseLayout title="Projects">
+  <!-- 3D animated background component loaded on client-side -->
   <PlantBackground client:load />
+
+  <!-- Outer container for centering and full viewport height -->
   <div class="projects-container">
+    <!-- Main content card with glassmorphism styling -->
     <div class="projects-content">
       <h1>My Projects</h1>
       <p>Here are some of the projects I've worked on:</p>
+      <!-- Placeholder project list - will be replaced with actual project cards -->
       <ul>
         <li>Project 1: A brief description.</li>
         <li>Project 2: Another cool project.</li>
       </ul>
+      <!-- Navigation link back to home page -->
       <a href="/">Back to Home</a>
     </div>
   </div>
 </BaseLayout>
 
 <style>
+  /* Outer container - full viewport with centered flex layout */
   .projects-container {
-    width: 100%;
-    min-height: 100vh;
-    padding: var(--spacing-lg);
+    width: 100%; /* Full width */
+    min-height: 100vh; /* Full viewport height */
+    padding: var(--spacing-lg); /* Large spacing from edges */
+    display: flex; /* Flexbox layout */
+    justify-content: center; /* Center horizontally */
+    align-items: flex-start; /* Align to top vertically */
   }
 
+  /* Main content card - glassmorphism design with backdrop blur */
   .projects-content {
-    padding: var(--spacing-xl);
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--box-shadow-lg);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-xl); /* Extra large internal padding */
+    background: rgba(
+      255,
+      255,
+      255,
+      0.85
+    ); /* Semi-transparent white background */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
+    box-shadow: var(--box-shadow-lg); /* Large shadow for depth */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
+    text-align: center; /* Center-aligned text */
+    max-width: 800px; /* Maximum width constraint - ADJUST THIS FOR CARD WIDTH */
   }
 
+  /* Dark theme styling for the content card */
   html[data-theme="dark"] .projects-content {
-    background: rgba(26, 26, 26, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(26, 26, 26, 0.85); /* Dark semi-transparent background */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle light border for contrast */
   }
 </style>
