@@ -93,7 +93,7 @@ export default function PlantBackground() {
         left: 0,
         width: "100%",
         height: "100%",
-        zIndex: 2,
+        zIndex: 0,
         overflow: "hidden",
         pointerEvents: "none", // Allow clicks to pass through
         borderRadius: "8px", // Match the main container's border radius
