@@ -26,6 +26,51 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
           <img src="/images/IMG_7895.jpeg" alt="Photo 3" loading="lazy" />
         </a>
       </div>
+      <div class="gallery-item container-card">
+        <a href="/videos/IMG_0112.MOV" class="lightbox-trigger video-trigger">
+          <div class="video-thumbnail">
+            <video class="gallery-video" muted preload="metadata" playsinline>
+              <source src="/videos/IMG_0112.MOV" type="video/quicktime" />
+            </video>
+            <div class="video-fallback">
+              <div class="video-icon">🎬</div>
+              <div class="video-label">IMG_0112.MOV</div>
+            </div>
+          </div>
+          <div class="play-overlay">▶</div>
+        </a>
+      </div>
+      <div class="gallery-item container-card">
+        <a href="/videos/IMG_1212.MOV" class="lightbox-trigger video-trigger">
+          <div class="video-thumbnail">
+            <video class="gallery-video" muted preload="metadata" playsinline>
+              <source src="/videos/IMG_1212.MOV" type="video/quicktime" />
+            </video>
+            <div class="video-fallback">
+              <div class="video-icon">🎬</div>
+              <div class="video-label">IMG_1212.MOV</div>
+            </div>
+          </div>
+          <div class="play-overlay">▶</div>
+        </a>
+      </div>
+      <div class="gallery-item container-card">
+        <a
+          href="/videos/IMG_0608.TRIM.MOV"
+          class="lightbox-trigger video-trigger"
+        >
+          <div class="video-thumbnail">
+            <video class="gallery-video" muted preload="metadata" playsinline>
+              <source src="/videos/IMG_0608.TRIM.MOV" type="video/quicktime" />
+            </video>
+            <div class="video-fallback">
+              <div class="video-icon">🎬</div>
+              <div class="video-label">IMG_0608.TRIM.MOV</div>
+            </div>
+          </div>
+          <div class="play-overlay">▶</div>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -34,7 +79,17 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
 
 <div id="lightbox" class="lightbox">
   <span class="close-button">&times;</span>
-  <img class="lightbox-content" id="lightbox-img" />
+  <div class="lightbox-content-container">
+    <img class="lightbox-content" id="lightbox-img" style="display: none;" />
+    <video
+      class="lightbox-content"
+      id="lightbox-video"
+      controls
+      style="display: none;"
+    >
+      Your browser does not support the video tag.
+    </video>
+  </div>
 </div>
 
 <script>
@@ -42,6 +97,45 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
   const lightboxImg = document.getElementById("lightbox-img");
   const closeButton = document.querySelector(".close-button");
   const galleryItems = document.querySelectorAll(".lightbox-trigger");
+  const lightboxVideo = document.getElementById("lightbox-video");
+
+  // Force video thumbnails to show first frame
+  const galleryVideos = document.querySelectorAll(".gallery-video");
+  galleryVideos.forEach((video) => {
+    const videoElement = video as HTMLVideoElement;
+
+    videoElement.addEventListener(
+      "loadedmetadata",
+      function (this: HTMLVideoElement) {
+        // Try multiple time points to find a visible frame
+        this.currentTime = Math.max(1.0, this.duration * 0.1); // 1 second or 10% into video
+      }
+    );
+
+    videoElement.addEventListener("seeked", function (this: HTMLVideoElement) {
+      // Force the video to show this frame
+      this.pause();
+    });
+
+    // Fallback: try to load and play briefly then pause
+    videoElement.addEventListener(
+      "canplaythrough",
+      function (this: HTMLVideoElement) {
+        this.currentTime = Math.max(1.0, this.duration * 0.1);
+        this.play()
+          .then(() => {
+            setTimeout(() => {
+              this.pause();
+              this.currentTime = Math.max(1.0, this.duration * 0.1);
+            }, 100);
+          })
+          .catch(() => {
+            // Silent fail if autoplay is blocked
+            this.currentTime = Math.max(1.0, this.duration * 0.1);
+          });
+      }
+    );
+  });
 
   if (lightbox && lightboxImg && closeButton) {
     galleryItems.forEach((item) => {
@@ -49,8 +143,22 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
         "click",
         function (this: HTMLAnchorElement, e: Event) {
           e.preventDefault();
+          const fileUrl = this.href;
+          const isVideo = /\.(mov|mp4|webm|ogg)$/i.test(fileUrl);
+
           lightbox.style.display = "flex";
-          (lightboxImg as HTMLImageElement).src = this.href;
+
+          if (isVideo && lightboxVideo) {
+            (lightboxImg as HTMLImageElement).style.display = "none";
+            (lightboxVideo as HTMLVideoElement).style.display = "block";
+            (lightboxVideo as HTMLVideoElement).src = fileUrl;
+            (lightboxVideo as HTMLVideoElement).load();
+          } else {
+            if (lightboxVideo)
+              (lightboxVideo as HTMLVideoElement).style.display = "none";
+            (lightboxImg as HTMLImageElement).style.display = "block";
+            (lightboxImg as HTMLImageElement).src = fileUrl;
+          }
         }
       );
     });
@@ -91,6 +199,7 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
   .gallery-item {
     overflow: hidden;
     transition: all 0.3s ease;
+    position: relative;
   }
 
   .gallery-item img {
@@ -105,12 +214,97 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
     transform: scale(1.05);
   }
 
+  .video-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+  }
+
+  .gallery-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    transition: transform 0.3s ease;
+  }
+
+  .video-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: var(--border-radius-md);
+    z-index: 1;
+  }
+
+  .video-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+
+  .video-label {
+    font-size: 14px;
+    text-align: center;
+    opacity: 0.8;
+    font-weight: 500;
+    word-break: break-word;
+    padding: 0 10px;
+  }
+
+  .gallery-item:hover .video-thumbnail {
+    transform: scale(1.05);
+  }
+
+  .gallery-item:hover .gallery-video {
+    transform: scale(1.05);
+  }
+
+  .play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: opacity 0.3s ease;
+    opacity: 0.8;
+  }
+
+  .gallery-item:hover .play-overlay {
+    opacity: 1;
+  }
+
   @media (max-width: 768px) {
     .gallery-grid {
       grid-template-columns: 1fr;
     }
 
     .gallery-item img {
+      height: 250px;
+    }
+
+    .gallery-video {
+      height: 250px;
+    }
+
+    .video-thumbnail {
       height: 250px;
     }
   }
@@ -136,6 +330,18 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
     display: block;
     max-width: 90%;
     max-height: 90%;
+    border-radius: var(--border-radius-md);
+  }
+
+  .lightbox-content-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  #lightbox-video {
+    max-width: 100%;
+    max-height: 100%;
     border-radius: var(--border-radius-md);
   }
 
