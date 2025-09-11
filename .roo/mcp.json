@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+     "context7": {
+      "type": "streamable-http",
+      "url": "https://mcp.context7.com/mcp"
+     },
+    "conport": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "context-portal-mcp",
+        "conport-mcp",
+        "--mode",
+        "stdio",
+        "--workspace_id",
+        "${workspaceFolder}",
+        "--log-file",
+        "./logs/conport.log",
+        "--log-level",
+        "INFO"
+      ]
+    }
+  }
+}
