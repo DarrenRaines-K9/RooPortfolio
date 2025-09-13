@@ -272,7 +272,6 @@ html[data-theme='dark'] .main-header {
 }
 
 .container-secondary {
-  /* Section containers like space-boi-section */
   box-shadow: var(--box-shadow-lg);
   border-radius: var(--border-radius-md);
   background-color: var(--color-background);

@@ -6,33 +6,27 @@ import SpaceBoiModel from "../components/SpaceBoiModel.jsx"; // Import the 3D mo
 ---
 
 <BaseLayout title="Home">
-  <h1>Welcome to my Portfolio!</h1>
-  <section class="space-boi-section">
-    <h2>Meet Space Boi</h2>
-    <SpaceBoiModel client:load />
-  </section>
+  <h2>Meet Space Boi</h2>
+  <SpaceBoiModel client:load />
 </BaseLayout>
 
-<style>
-  .space-boi-section {
-    /* Enhanced styling with new shadow system */
-    box-shadow: var(--box-shadow-lg);
-    border-radius: var(--border-radius-md);
-    background-color: var(--color-background);
-    padding: var(--spacing-lg);
-    margin: var(--spacing-lg) 0;
-    text-align: center;
-    transition: all 0.3s ease;
+<style is:global>
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrollbars from appearing due to canvas */
   }
 
-  .space-boi-section:hover {
-    box-shadow: var(--box-shadow-xl);
-    transform: translateY(-2px);
+  main {
+    max-width: 100%;
+    padding: 0;
+    height: 100%; /* Ensure main fills the height */
+    border: 2px solid limegreen; /* Keep the green border */
   }
 
-  .space-boi-section h2 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+  main h2 {
     color: var(--color-primary);
   }
 </style>

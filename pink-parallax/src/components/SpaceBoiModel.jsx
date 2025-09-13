@@ -50,18 +50,17 @@ export default function SpaceBoiModel() {
   return (
     <div
       style={{
-        padding: "2rem",
         width: "100%",
-        maxWidth: "600px",
-        margin: "0 auto",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Canvas
         style={{
-          width: "600px",
-          height: "800px",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-          borderRadius: "8px",
+          width: "100%",
+          height: "100%",
         }}
       >
         <PerspectiveCamera makeDefault position={[0, 0, 10]} />
