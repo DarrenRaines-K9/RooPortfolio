@@ -1,32 +1,74 @@
 ---
-// index.astro: This is the main home page of the portfolio website.
-// It uses the BaseLayout for consistent page structure.
-import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
-import SpaceBoiModel from "../components/SpaceBoiModel.jsx"; // Import the 3D model component
+/**
+ * index.astro - Portfolio Homepage
+ *
+ * This is the main landing page of the portfolio website, designed to
+ * showcase the interactive 3D Space Boi character model. The page
+ * demonstrates modern web technologies and creates an engaging first
+ * impression for visitors.
+ *
+ * Key Features:
+ * - Full-screen 3D character model with interactive controls
+ * - Immersive user experience with orbital camera controls
+ * - Optimized for performance with client-side hydration
+ * - Responsive design that works across all devices
+ * - Clean, minimal design that lets the 3D model be the star
+ *
+ * Technical Implementation:
+ * - Uses BaseLayout for consistent page structure and navigation
+ * - SpaceBoiModel component with Three.js integration
+ * - Global styles override default layout for immersive experience
+ * - Client-side hydration ensures 3D model loads properly
+ */
+
+// Import the base layout that provides header, navigation, and structure
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Import the interactive 3D model component
+import SpaceBoiModel from "../components/SpaceBoiModel.jsx";
 ---
 
+<!-- Wrap page content in BaseLayout, providing "Home" as the page title -->
 <BaseLayout title="Home">
+  <!-- Page heading - introduces the main feature -->
   <h2>Meet Space Boi</h2>
+
+  <!-- 3D Model Component with client-side hydration -->
+  <!-- client:load directive tells Astro to hydrate this React component -->
+  <!-- on the client side, enabling full interactivity and Three.js functionality -->
   <SpaceBoiModel client:load />
 </BaseLayout>
 
+<!-- Global styles for immersive 3D experience -->
+<!-- is:global tells Astro these styles apply globally, not just to this component -->
 <style is:global>
+  /**
+   * Full-screen immersive layout styles
+   *
+   * These styles override the default layout to create a full-screen
+   * 3D experience where the model takes up the entire viewport.
+   * This provides maximum impact for the portfolio's main showcase.
+   */
+
+  /* Ensure html and body fill the entire viewport */
   html,
   body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* Prevent scrollbars from appearing due to canvas */
+    height: 100%; /* Full viewport height */
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+    overflow: hidden; /* Hide scrollbars - 3D scene should fill screen */
   }
 
+  /* Main content area adjustments for 3D display */
   main {
-    max-width: 100%;
-    padding: 0;
-    height: 100%; /* Ensure main fills the height */
-    border: 2px solid limegreen; /* Keep the green border */
+    max-width: 100%; /* Allow full width (override layout constraints) */
+    padding: 0; /* Remove padding for edge-to-edge display */
+    height: 100%; /* Fill entire viewport height */
+    border: 2px solid limegreen; /* Signature lime green border - design element */
   }
 
+  /* Heading styling within the main content */
   main h2 {
-    color: var(--color-primary);
+    color: var(--color-primary); /* Use theme primary color (green) */
   }
 </style>

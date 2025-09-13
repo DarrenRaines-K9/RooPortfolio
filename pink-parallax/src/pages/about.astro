@@ -1,45 +1,112 @@
 ---
-// about.astro: This page displays information about the author or website.
-// It uses the BaseLayout for consistent page structure.
-import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout component.
+/**
+ * about.astro - Portfolio About Page with Advanced Photo/Video Gallery
+ *
+ * This page showcases personal information along with a sophisticated
+ * media gallery featuring both images and videos. It demonstrates advanced
+ * frontend techniques including lightbox functionality, video handling,
+ * responsive design, and accessibility features.
+ *
+ * Key Features:
+ * - Interactive photo and video gallery with lightbox modal
+ * - Responsive CSS Grid layout that adapts to different screen sizes
+ * - Video thumbnail generation with fallback displays
+ * - Modal gallery with keyboard navigation support
+ * - Click-outside-to-close functionality
+ * - Lazy loading for performance optimization
+ * - Cross-browser video compatibility with multiple formats
+ *
+ * Technical Implementation:
+ * - Pure JavaScript lightbox (no external dependencies)
+ * - CSS Grid with auto-fit and minmax for responsive design
+ * - Event delegation for efficient event handling
+ * - HTML5 video API for thumbnail generation
+ * - Semantic HTML structure for accessibility
+ * - Progressive enhancement principles
+ */
+
+// Import the base layout component for consistent page structure
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
+<!-- Wrap page content in BaseLayout with "About Me" title -->
 <BaseLayout title="About Me">
+  <!-- Page heading -->
   <h1>About Me</h1>
+
+  <!-- Personal introduction paragraph -->
+  <!-- TODO: Replace placeholder text with actual personal information -->
   <p>Hi, I'm [Your Name]! This is where I'll tell you a bit about myself.</p>
 
+  <!-- === PHOTO & VIDEO GALLERY SECTION === -->
+  <!-- Interactive media gallery with lightbox functionality -->
   <section class="photo-gallery container-secondary">
+    <!-- Gallery section heading -->
     <h2>Photo Gallery</h2>
+
+    <!-- Responsive grid container for gallery items -->
+    <!-- Uses CSS Grid with auto-fit and minmax for responsive behavior -->
     <div class="gallery-grid">
+      <!-- === IMAGE GALLERY ITEMS === -->
+      <!-- Each gallery item is a clickable thumbnail that opens in lightbox -->
+
+      <!-- Gallery Item 1 - Static Image -->
       <div class="gallery-item container-card">
+        <!-- Lightbox trigger link - href points to full-size image -->
         <a href="/images/DSC_0644.jpg" class="lightbox-trigger">
+          <!-- Thumbnail image with lazy loading for performance -->
+          <!-- loading="lazy" defers loading until image is near viewport -->
           <img src="/images/DSC_0644.jpg" alt="Photo 1" loading="lazy" />
         </a>
       </div>
+
+      <!-- Gallery Item 2 - Static Image -->
       <div class="gallery-item container-card">
         <a href="/images/IMG_0291.JPG" class="lightbox-trigger">
           <img src="/images/IMG_0291.JPG" alt="Photo 2" loading="lazy" />
         </a>
       </div>
+
+      <!-- Gallery Item 3 - Static Image -->
       <div class="gallery-item container-card">
         <a href="/images/IMG_7895.jpeg" class="lightbox-trigger">
           <img src="/images/IMG_7895.jpeg" alt="Photo 3" loading="lazy" />
         </a>
       </div>
+
+      <!-- === VIDEO GALLERY ITEMS === -->
+      <!-- Videos require more complex structure for thumbnails and playback -->
+
+      <!-- Gallery Item 4 - Video with Thumbnail Generation -->
       <div class="gallery-item container-card">
+        <!-- Video lightbox trigger - additional 'video-trigger' class for JavaScript -->
         <a href="/videos/IMG_0112.MOV" class="lightbox-trigger video-trigger">
+          <!-- Video thumbnail container -->
           <div class="video-thumbnail">
+            <!-- HTML5 video element for thumbnail generation -->
+            <!-- muted: Required for autoplay on most browsers -->
+            <!-- preload="metadata": Loads video info but not full video -->
+            <!-- playsinline: Prevents fullscreen on mobile iOS -->
             <video class="gallery-video" muted preload="metadata" playsinline>
+              <!-- Video source - QuickTime format -->
               <source src="/videos/IMG_0112.MOV" type="video/quicktime" />
             </video>
+
+            <!-- Fallback display if video thumbnail fails to generate -->
             <div class="video-fallback">
+              <!-- Movie camera emoji as visual indicator -->
               <div class="video-icon">🎬</div>
+              <!-- Filename display for user recognition -->
               <div class="video-label">IMG_0112.MOV</div>
             </div>
           </div>
+
+          <!-- Play button overlay to indicate this is a video -->
           <div class="play-overlay">▶</div>
         </a>
       </div>
+
+      <!-- Gallery Item 5 - Video with Thumbnail Generation -->
       <div class="gallery-item container-card">
         <a href="/videos/IMG_1212.MOV" class="lightbox-trigger video-trigger">
           <div class="video-thumbnail">
@@ -54,7 +121,10 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
           <div class="play-overlay">▶</div>
         </a>
       </div>
+
+      <!-- Gallery Item 6 - Trimmed Video -->
       <div class="gallery-item container-card">
+        <!-- Multi-line href for better code readability -->
         <a
           href="/videos/IMG_0608.TRIM.MOV"
           class="lightbox-trigger video-trigger"
@@ -74,6 +144,7 @@ import BaseLayout from "../layouts/BaseLayout.astro"; // Imports the base layout
     </div>
   </section>
 
+  <!-- Navigation link back to homepage -->
   <a href="/">Back to Home</a>
 </BaseLayout>
 

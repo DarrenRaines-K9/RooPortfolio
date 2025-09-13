@@ -1,41 +1,86 @@
 ---
-// BaseLayout.astro: This layout component provides the fundamental HTML structure for all pages.
-// It includes meta tags, font imports, a header with navigation and theme toggle, and a main content area.
+/**
+ * BaseLayout.astro - Foundation Layout Component for All Pages
+ *
+ * This Astro layout component provides the core HTML structure that wraps
+ * all pages in the application. It ensures consistent behavior across the
+ * entire website with shared navigation, theming, and styling.
+ *
+ * Key Features:
+ * - Responsive navigation with desktop/mobile variants
+ * - Theme toggle integration for dark/light mode
+ * - Font optimization and performance enhancements
+ * - SEO-friendly meta tags and structure
+ * - Accessibility features (ARIA labels, semantic HTML)
+ * - Slot-based content injection for page-specific content
+ *
+ * This layout follows the standard web architecture pattern where
+ * shared UI elements are defined once and reused across all pages.
+ */
 
+// TypeScript interface defining the props this component accepts
 interface Props {
-  title: string; // Defines the title property for the page.
+  title: string; // Page title - displayed in browser tab and used for SEO
 }
 
-const { title } = Astro.props; // Extracts the title from Astro's props.
+// Extract the title prop from Astro's props system
+// Astro.props contains all props passed to this component
+const { title } = Astro.props;
 
-import ThemeToggle from "../components/ThemeToggle.astro"; // Imports the theme toggle component.
-import "../styles/global.css"; // Imports global styles for the application.
+// Import required components and styles
+import ThemeToggle from "../components/ThemeToggle.astro"; // Advanced theme switching component
+import "../styles/global.css"; // Global CSS variables, typography, and base styles
 ---
 
+<!-- HTML document structure with proper language attribute for accessibility -->
 <html lang="en">
-  <!-- The main HTML document structure. -->
+  <!-- Document head - contains metadata, links, and page configuration -->
   <head>
+    <!-- Character encoding - UTF-8 supports all international characters -->
     <meta charset="utf-8" />
+
+    <!-- Favicon - icon shown in browser tabs and bookmarks -->
     <link
       rel="icon"
       type="image/png"
       href="/images/94006FEB-04DF-4F69-AC71-DC261E49CB5F.png"
     />
+
+    <!-- Viewport meta tag - essential for responsive design on mobile devices -->
+    <!-- width=device-width: use device's actual width, not desktop width -->
+    <!-- initial-scale=1.0: no zooming on page load -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Generator meta tag - identifies this site as built with Astro -->
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Dynamic page title - uses the title prop passed from individual pages -->
     <title>{title}</title>
+
+    <!-- === FONT OPTIMIZATION === -->
+    <!-- Preconnect to Google Fonts - establishes connection early for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Inter font family - modern, readable typeface used throughout the site -->
+    <!-- Weights: 300 (light), 400 (regular), 500 (medium), 700 (bold) -->
+    <!-- display=swap: shows fallback font while custom font loads -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
   </head>
+
+  <!-- Document body - contains all visible page content -->
   <body>
-    <!-- The body contains the main content, header, and scripts. -->
+    <!-- === SITE HEADER === -->
+    <!-- Main navigation header - sticky positioned, visible on all pages -->
     <header class="main-header">
+      <!-- Site branding section - logo and home link -->
       <div class="site-branding">
+        <!-- Logo link - clicking returns user to homepage -->
         <a href="/" class="site-title">
+          <!-- Site logo image with descriptive alt text for accessibility -->
           <img
             src="/images/94006FEB-04DF-4F69-AC71-DC261E49CB5F.png"
             alt="Alien Logo"
@@ -43,26 +88,49 @@ import "../styles/global.css"; // Imports global styles for the application.
           />
         </a>
       </div>
+
+      <!-- Main navigation menu -->
+      <!-- id="main-navigation" allows JavaScript to target this element -->
       <nav class="main-nav" id="main-navigation">
+        <!-- Navigation links list -->
         <ul class="nav-list">
+          <!-- Each nav item includes descriptive text and proper href -->
           <li><a href="/" class="nav-link">Home</a></li>
           <li><a href="/about" class="nav-link">About</a></li>
           <li><a href="/projects" class="nav-link">Projects</a></li>
         </ul>
       </nav>
+
+      <!-- Navigation actions - theme toggle and mobile menu button -->
       <div class="nav-actions">
+        <!-- Theme toggle component - handles dark/light mode switching -->
         <ThemeToggle />
+
+        <!-- Mobile hamburger menu button -->
+        <!-- aria-label provides description for screen readers -->
         <button class="hamburger-menu" aria-label="Toggle navigation">
+          <!-- Three horizontal lines creating the "hamburger" icon -->
+          <!-- Each span represents one line of the icon -->
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
         </button>
       </div>
     </header>
+
+    <!-- === MAIN CONTENT AREA === -->
+    <!-- Main element - contains the primary page content -->
+    <!-- This is where page-specific content gets injected via <slot /> -->
     <main>
+      <!-- Slot - Astro's content injection mechanism -->
+      <!-- Whatever content is wrapped by this layout will appear here -->
+      <!-- Each page (index.astro, about.astro, etc.) provides different content -->
       <slot />
     </main>
+
+    <!-- === JAVASCRIPT IMPORTS === -->
+    <!-- Navigation script - handles mobile menu toggle functionality -->
+    <!-- Loaded at the end of body for performance (DOM is ready) -->
     <script src="../scripts/navbar.js"></script>
-    <!-- Imports the JavaScript for handling navigation interactions. -->
   </body>
 </html>

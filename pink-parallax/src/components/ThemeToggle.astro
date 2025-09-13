@@ -1,12 +1,33 @@
 ---
-// This Astro component provides a theme toggle button (light/dark mode).
-// It uses inline JavaScript to manage theme state in localStorage and apply it to the document's data-theme attribute.
+/**
+ * ThemeToggle.astro - Advanced Dark/Light Mode Toggle Component
+ *
+ * This Astro component creates a sophisticated theme toggle with:
+ * - Animated slider mechanism with smooth transitions
+ * - SVG icons for sun (light mode) and moon (dark mode)
+ * - localStorage persistence to remember user preference
+ * - System preference detection (respects OS dark mode setting)
+ * - Accessibility features (ARIA labels, keyboard navigation)
+ * - Smooth animations and visual feedback
+ *
+ * Technical Implementation:
+ * - Uses data attributes on <html> for theme switching
+ * - CSS custom properties for theme-aware styling
+ * - Client-side JavaScript for immediate theme application
+ * - No hydration needed - runs immediately in browser
+ */
 ---
 
+<!-- Main toggle button with accessibility label --><!-- aria-label provides screen reader description -->
 <button id="theme-toggle" aria-label="Toggle dark mode">
+  <!-- Sliding background element that moves to indicate active theme -->
   <div class="slider-thumb"></div>
+
+  <!-- Container for both theme icons (sun and moon) -->
   <div class="theme-icons-container">
+    <!-- Sun icon wrapper - represents light theme -->
     <div id="sun-wrapper" class="theme-icon-wrapper">
+      <!-- SVG sun icon with rays - standard feather icon design -->
       <svg
         id="sun-icon"
         class="theme-icon"
@@ -19,18 +40,31 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
+        <!-- Central sun circle -->
         <circle cx="12" cy="12" r="5"></circle>
+        <!-- Sun rays - 8 lines extending from center -->
         <line x1="12" y1="1" x2="12" y2="3"></line>
+        <!-- Top ray -->
         <line x1="12" y1="21" x2="12" y2="23"></line>
+        <!-- Bottom ray -->
         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <!-- Top-left ray -->
         <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <!-- Bottom-right ray -->
         <line x1="1" y1="12" x2="3" y2="12"></line>
+        <!-- Left ray -->
         <line x1="21" y1="12" x2="23" y2="12"></line>
+        <!-- Right ray -->
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <!-- Bottom-left ray -->
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        <!-- Top-right ray -->
       </svg>
     </div>
+
+    <!-- Moon icon wrapper - represents dark theme -->
     <div id="moon-wrapper" class="theme-icon-wrapper">
+      <!-- SVG crescent moon icon - standard feather icon design -->
       <svg
         id="moon-icon"
         class="theme-icon"
@@ -43,144 +77,212 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
+        <!-- Crescent moon path - creates the classic moon shape -->
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
     </div>
   </div>
 </button>
 
+<!--
+  Client-side script with is:inline directive
+  
+  is:inline tells Astro to include this script directly in the HTML
+  without bundling. This ensures the theme is applied immediately
+  when the page loads, preventing flash of wrong theme.
+-->
 <script is:inline>
-  // Client-side script to handle theme toggling and persistence.
-  const themeToggle = document.getElementById("theme-toggle");
-  const html = document.documentElement;
-  const sliderThumb = document.querySelector(".slider-thumb");
-  const sunWrapper = document.getElementById("sun-wrapper");
-  const moonWrapper = document.getElementById("moon-wrapper");
+  /**
+   * Theme Toggle JavaScript - Handles all theme switching logic
+   *
+   * This script runs immediately when the page loads to:
+   * 1. Detect saved theme preference or system preference
+   * 2. Apply the correct theme immediately (no flash)
+   * 3. Set up event listeners for user interactions
+   * 4. Manage visual state of the toggle button
+   */
 
-  // Function to set the theme and update icon visibility
+  // Get references to all DOM elements we need to manipulate
+  const themeToggle = document.getElementById("theme-toggle"); // Main button
+  const html = document.documentElement; // <html> element for data-theme attribute
+  const sliderThumb = document.querySelector(".slider-thumb"); // Moving background element
+  const sunWrapper = document.getElementById("sun-wrapper"); // Sun icon container
+  const moonWrapper = document.getElementById("moon-wrapper"); // Moon icon container
+
+  /**
+   * setTheme - Central function that applies theme and updates UI
+   *
+   * @param {string} theme - Either "light" or "dark"
+   *
+   * This function:
+   * 1. Sets the data-theme attribute on <html> (triggers CSS changes)
+   * 2. Saves preference to localStorage for persistence
+   * 3. Moves the slider thumb to indicate active theme
+   * 4. Updates icon colors to show which theme is active
+   */
   function setTheme(theme) {
+    // Apply theme to HTML element - this triggers all CSS theme changes
     html.setAttribute("data-theme", theme);
+
+    // Save user preference to browser storage for next visit
     localStorage.setItem("theme", theme);
+
     if (theme === "dark") {
-      sliderThumb.style.transform = "translateX(100%)";
-      sunWrapper.classList.remove("is-active");
-      moonWrapper.classList.add("is-active");
+      // Dark theme active: slider moves right, moon icon highlighted
+      sliderThumb.style.transform = "translateX(100%)"; // Move slider to right side
+      sunWrapper.classList.remove("is-active"); // Deactivate sun icon
+      moonWrapper.classList.add("is-active"); // Activate moon icon
     } else {
-      sliderThumb.style.transform = "translateX(0)";
-      sunWrapper.classList.add("is-active");
-      moonWrapper.classList.remove("is-active");
+      // Light theme active: slider moves left, sun icon highlighted
+      sliderThumb.style.transform = "translateX(0)"; // Move slider to left side
+      sunWrapper.classList.add("is-active"); // Activate sun icon
+      moonWrapper.classList.remove("is-active"); // Deactivate moon icon
     }
   }
 
-  // Check for saved theme preference or system preference
+  // === THEME INITIALIZATION ===
+  // Determine which theme to use on page load
+
+  // First check: look for saved user preference in localStorage
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme) {
+    // User has explicitly chosen a theme before - use their preference
     setTheme(savedTheme);
   } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    // No saved preference, but user's OS is set to dark mode
+    // matchMedia checks CSS media query for system dark mode preference
     setTheme("dark");
   } else {
+    // Default to light theme if no preference detected
     setTheme("light");
   }
 
-  // Toggle theme on button click
+  // === USER INTERACTION ===
+  // Set up click handler for theme toggle button
   themeToggle.addEventListener("click", () => {
+    // Get current theme from HTML attribute
     const currentTheme = html.getAttribute("data-theme");
+
+    // Toggle to opposite theme
     const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+    // Apply the new theme
     setTheme(newTheme);
   });
 </script>
 
 <style>
+  /**
+   * Theme Toggle Styles
+   *
+   * Creates a professional toggle switch with:
+   * - Smooth animations and transitions
+   * - Responsive hover and focus states
+   * - Accessibility features (focus outlines)
+   * - Theme-aware colors using CSS custom properties
+   */
+
+  /* CSS Custom Properties - Define reusable values for consistency */
   :root {
-    --theme-toggle-width: 60px; /* Width of the entire toggle button */
-    --theme-toggle-height: 32px; /* Height of the entire toggle button */
-    --icon-size: 24px; /* Size of the SVG icons */
-    --slider-bg-color: var(
-      --color-bg-offset
-    ); /* Background for the slider thumb */
-    --icon-inactive-color: var(
-      --color-text-muted
-    ); /* Color for inactive icon */
-    --icon-active-color: var(--color-primary); /* Green color for active icon */
+    --theme-toggle-width: 60px; /* Total width of toggle button */
+    --theme-toggle-height: 32px; /* Total height of toggle button */
+    --icon-size: 24px; /* Size of SVG icons */
+    --slider-bg-color: var(--color-bg-offset); /* Slider background color */
+    --icon-inactive-color: var(--color-text-muted); /* Inactive icon color */
+    --icon-active-color: var(--color-primary); /* Active icon color (green) */
   }
 
+  /* Main toggle button styling */
   #theme-toggle {
-    position: relative;
-    background: var(--color-bg-offset);
-    cursor: pointer;
-    width: var(--theme-toggle-width);
-    height: var(--theme-toggle-height);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 2px solid limegreen;
-    border-radius: 9999px; /* Fully rounded border */
-    overflow: hidden; /* Crucial for containing the slider thumb */
-    padding: 0 5px;
-    margin: auto; /* Add horizontal padding inside the toggle */
+    position: relative; /* For absolute positioning of child elements */
+    background: var(--color-bg-offset); /* Button background color */
+    cursor: pointer; /* Show pointer cursor on hover */
+    width: var(--theme-toggle-width); /* Use defined width */
+    height: var(--theme-toggle-height); /* Use defined height */
+    display: flex; /* Flexbox layout for icon positioning */
+    align-items: center; /* Center icons vertically */
+    justify-content: space-between; /* Distribute icons to edges */
+    border: 2px solid limegreen; /* Signature lime green border */
+    border-radius: 9999px; /* Fully rounded (pill shape) */
+    overflow: hidden; /* Hide slider movement outside bounds */
+    padding: 0 5px; /* Small internal padding */
+    margin: auto; /* Center the toggle button */
+
+    /* Smooth transitions for interactive states */
     transition:
       border-color 0.3s ease,
-      background-color 0.3s ease;
+      /* Animate border color changes */ background-color 0.3s ease; /* Animate background color changes */
   }
 
+  /* Hover state - highlight border */
   #theme-toggle:hover {
-    border-color: var(--color-primary);
+    border-color: var(--color-primary); /* Change to primary green on hover */
   }
 
+  /* Focus state - accessibility outline */
   #theme-toggle:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: 2px solid var(--color-primary); /* Green focus outline */
+    outline-offset: 2px; /* Space between button and outline */
   }
 
+  /* Sliding background element that indicates active theme */
   .slider-thumb {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%; /* Half the width of the toggle for one icon */
-    height: 100%;
-    background-color: var(--slider-bg-color);
-    border-radius: var(--border-radius-lg);
-    transition: transform 0.3s ease;
-    z-index: 0; /* Ensure it's behind the icons */
+    position: absolute; /* Position absolutely within button */
+    top: 0; /* Align to top of button */
+    left: 0; /* Start at left edge */
+    width: 50%; /* Half the button width */
+    height: 100%; /* Full button height */
+    background-color: var(--slider-bg-color); /* Background color */
+    border-radius: var(--border-radius-lg); /* Rounded corners */
+    transition: transform 0.3s ease; /* Smooth sliding animation */
+    z-index: 0; /* Behind icons */
   }
 
+  /* Container for both theme icons */
   .theme-icons-container {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
+    position: relative; /* For z-index stacking */
+    display: flex; /* Flexbox layout */
+    width: 100%; /* Full button width */
+    height: 100%; /* Full button height */
+    align-items: center; /* Center icons vertically */
     justify-content: space-around; /* Distribute icons evenly */
-    z-index: 1; /* Ensure icons are above the slider thumb */
+    z-index: 1; /* Above slider thumb */
   }
 
+  /* Individual icon wrapper styling */
   .theme-icon-wrapper {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s ease; /* Smooth color transition */
+    width: var(--icon-size); /* Icon container size */
+    height: var(--icon-size); /* Icon container size */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    transition: color 0.3s ease; /* Smooth color transitions */
   }
 
+  /* SVG icon styling */
   .theme-icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
+    width: var(--icon-size); /* Icon size */
+    height: var(--icon-size); /* Icon size */
     stroke: var(--icon-inactive-color); /* Default inactive color */
-    fill: none;
-    transition: stroke 0.3s ease; /* Smooth stroke color transition */
+    fill: none; /* No fill - stroke only */
+    transition: stroke 0.3s ease; /* Smooth color transitions */
   }
 
-  /* Active states for slider and icon colors */
+  /* === THEME-SPECIFIC STATES === */
+  /* These styles are applied based on the data-theme attribute on <html> */
+
+  /* Dark theme: slider moves to right side (covering sun icon) */
   html[data-theme="dark"] .slider-thumb {
-    transform: translateX(100%); /* Slider moves to cover sun (left icon) */
+    transform: translateX(100%); /* Move slider to right */
   }
 
+  /* Light theme: slider stays on left side (covering moon icon) */
   html[data-theme="light"] .slider-thumb {
-    transform: translateX(0); /* Slider moves to cover moon (right icon) */
+    transform: translateX(0); /* Keep slider on left */
   }
 
+  /* Active icon styling - green color for currently selected theme */
   .theme-icon-wrapper.is-active .theme-icon {
-    stroke: var(--icon-active-color); /* Active icon turns green */
+    stroke: var(--icon-active-color); /* Primary green color */
   }
 </style>
