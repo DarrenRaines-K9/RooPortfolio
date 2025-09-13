@@ -51,7 +51,7 @@ body {
   background-color: var(--color-background);
   transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
-  padding: var(--spacing-lg);
+  padding: 0; /* Remove body padding to let main element control spacing */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -64,9 +64,8 @@ main {
   align-items: center;
   justify-content: center;
   max-width: 800px; /* Adjust as needed */
-  margin-inline: auto; /* Modern way to center block elements */
-  margin-top: var(--spacing-xl); /* Add gap from navbar */
-  padding: var(--spacing-lg);
+  margin: var(--spacing-xl) auto; /* Add margin on all sides and center horizontally */
+  padding: var(--spacing-xl); /* Increased padding around the content and border */
   box-shadow: var(--box-shadow-xl); /* Strongest shadow for main content */
   border-radius: var(--border-radius-md);
   background-color: var(--color-background); /* Ensure main has background for shadow */
