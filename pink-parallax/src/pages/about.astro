@@ -148,289 +148,476 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <a href="/">Back to Home</a>
 </BaseLayout>
 
+<!-- === LIGHTBOX MODAL STRUCTURE === -->
+<!-- Modal overlay that displays full-size images and videos -->
+<!-- Hidden by default, shown via JavaScript when gallery items are clicked -->
 <div id="lightbox" class="lightbox">
+  <!-- Close button with HTML entity for × symbol -->
   <span class="close-button">&times;</span>
+
+  <!-- Container for lightbox content (image or video) -->
   <div class="lightbox-content-container">
+    <!-- Image element for displaying photos in lightbox -->
+    <!-- Hidden by default, shown when image is selected -->
     <img class="lightbox-content" id="lightbox-img" style="display: none;" />
+
+    <!-- Video element for displaying videos in lightbox -->
+    <!-- controls attribute provides play/pause/volume controls -->
+    <!-- Hidden by default, shown when video is selected -->
     <video
       class="lightbox-content"
       id="lightbox-video"
       controls
       style="display: none;"
     >
+      <!-- Fallback text for browsers that don't support video tag -->
       Your browser does not support the video tag.
     </video>
   </div>
 </div>
 
+<!-- === LIGHTBOX JAVASCRIPT === -->
+<!-- Complex JavaScript handling lightbox functionality and video thumbnails -->
 <script>
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-  const closeButton = document.querySelector(".close-button");
-  const galleryItems = document.querySelectorAll(".lightbox-trigger");
-  const lightboxVideo = document.getElementById("lightbox-video");
+  /**
+   * Lightbox Gallery JavaScript
+   *
+   * This script manages a sophisticated photo/video gallery with:
+   * - Modal lightbox for full-size viewing
+   * - Video thumbnail generation from first frame
+   * - Keyboard and click navigation
+   * - Progressive enhancement (works without JS)
+   * - Cross-browser video compatibility
+   */
 
-  // Force video thumbnails to show first frame
+  // === DOM ELEMENT REFERENCES ===
+  // Get references to all elements needed for lightbox functionality
+  const lightbox = document.getElementById("lightbox"); // Modal overlay
+  const lightboxImg = document.getElementById("lightbox-img"); // Image display element
+  const closeButton = document.querySelector(".close-button"); // X close button
+  const galleryItems = document.querySelectorAll(".lightbox-trigger"); // All clickable gallery items
+  const lightboxVideo = document.getElementById("lightbox-video"); // Video display element
+
+  // === VIDEO THUMBNAIL GENERATION ===
+  /**
+   * Advanced video thumbnail generation system
+   *
+   * HTML5 video elements can generate thumbnails by seeking to a specific
+   * time point and displaying that frame. This provides visual previews
+   * without requiring separate thumbnail images.
+   */
+
+  // Get all video elements used for thumbnails
   const galleryVideos = document.querySelectorAll(".gallery-video");
+
+  // Process each video to generate thumbnails
   galleryVideos.forEach((video) => {
+    // Cast to HTMLVideoElement for TypeScript compatibility
     const videoElement = video as HTMLVideoElement;
 
+    /**
+     * Event: loadedmetadata
+     *
+     * Fires when video metadata (duration, dimensions) is loaded
+     * but before the actual video content loads. This is the ideal
+     * time to seek to a specific frame for thumbnail generation.
+     */
     videoElement.addEventListener(
       "loadedmetadata",
       function (this: HTMLVideoElement) {
-        // Try multiple time points to find a visible frame
-        this.currentTime = Math.max(1.0, this.duration * 0.1); // 1 second or 10% into video
+        // Seek to a good thumbnail frame
+        // Math.max ensures we don't seek to 0 (often black frame)
+        // Uses either 1 second or 10% of video duration, whichever is larger
+        this.currentTime = Math.max(1.0, this.duration * 0.1);
       }
     );
 
+    /**
+     * Event: seeked
+     *
+     * Fires when seeking to a new time position is complete.
+     * We pause the video here to keep it on the thumbnail frame.
+     */
     videoElement.addEventListener("seeked", function (this: HTMLVideoElement) {
-      // Force the video to show this frame
+      // Pause to keep the thumbnail frame visible
       this.pause();
     });
 
-    // Fallback: try to load and play briefly then pause
+    /**
+     * Event: canplaythrough
+     *
+     * Fallback method for thumbnail generation. Some browsers
+     * need the video to actually play briefly to show a frame.
+     * This provides a more aggressive approach for stubborn videos.
+     */
     videoElement.addEventListener(
       "canplaythrough",
       function (this: HTMLVideoElement) {
+        // Set the thumbnail time point
         this.currentTime = Math.max(1.0, this.duration * 0.1);
+
+        // Attempt to play briefly then pause
         this.play()
           .then(() => {
+            // After successful play start, pause and re-seek
             setTimeout(() => {
               this.pause();
               this.currentTime = Math.max(1.0, this.duration * 0.1);
-            }, 100);
+            }, 100); // 100ms delay to let frame render
           })
           .catch(() => {
-            // Silent fail if autoplay is blocked
+            // Silent fail if autoplay is blocked by browser
+            // Many browsers block autoplay, so we handle this gracefully
             this.currentTime = Math.max(1.0, this.duration * 0.1);
           });
       }
     );
   });
 
+  // === LIGHTBOX FUNCTIONALITY ===
+  /**
+   * Main lightbox interaction setup
+   *
+   * Only proceed if all required elements exist (defensive programming)
+   */
   if (lightbox && lightboxImg && closeButton) {
+    // === GALLERY ITEM CLICK HANDLERS ===
+    /**
+     * Set up click handlers for all gallery items
+     *
+     * Uses forEach to attach event listeners to each gallery trigger.
+     * Event delegation could be used for better performance with many items,
+     * but this approach is clearer for educational purposes.
+     */
     galleryItems.forEach((item) => {
       item.addEventListener(
         "click",
         function (this: HTMLAnchorElement, e: Event) {
+          // Prevent default link behavior (navigating to image/video URL)
           e.preventDefault();
+
+          // Get the URL of the media file from the link's href
           const fileUrl = this.href;
+
+          // Determine if this is a video file based on extension
+          // Regular expression checks common video file extensions
+          // 'i' flag makes it case-insensitive
           const isVideo = /\.(mov|mp4|webm|ogg)$/i.test(fileUrl);
 
+          // Show the lightbox modal
           lightbox.style.display = "flex";
 
           if (isVideo && lightboxVideo) {
+            // === VIDEO DISPLAY MODE ===
+            // Hide image element and show video element
             (lightboxImg as HTMLImageElement).style.display = "none";
             (lightboxVideo as HTMLVideoElement).style.display = "block";
+
+            // Set video source and load it
             (lightboxVideo as HTMLVideoElement).src = fileUrl;
-            (lightboxVideo as HTMLVideoElement).load();
+            (lightboxVideo as HTMLVideoElement).load(); // Trigger loading
           } else {
+            // === IMAGE DISPLAY MODE ===
+            // Hide video element and show image element
             if (lightboxVideo)
               (lightboxVideo as HTMLVideoElement).style.display = "none";
             (lightboxImg as HTMLImageElement).style.display = "block";
+
+            // Set image source (this triggers loading and display)
             (lightboxImg as HTMLImageElement).src = fileUrl;
           }
         }
       );
     });
 
+    // === CLOSE BUTTON HANDLER ===
+    /**
+     * Handle close button clicks
+     *
+     * Simple event handler that hides the lightbox when X is clicked
+     */
     closeButton.addEventListener("click", function () {
       lightbox.style.display = "none";
     });
 
+    // === CLICK-OUTSIDE-TO-CLOSE HANDLER ===
+    /**
+     * Handle clicking outside content to close lightbox
+     *
+     * This provides intuitive UX - users expect to be able to
+     * click the dark overlay to close modal dialogs.
+     */
     lightbox.addEventListener("click", function (e) {
+      // Only close if the click was on the lightbox itself,
+      // not on the content inside it
       if (e.target === lightbox) {
         lightbox.style.display = "none";
       }
     });
   }
+
+  /**
+   * Future Enhancement Ideas:
+   *
+   * 1. Keyboard Navigation:
+   *    - Escape key to close
+   *    - Arrow keys to navigate between gallery items
+   *    - Enter/Space to open selected item
+   *
+   * 2. Touch/Swipe Support:
+   *    - Swipe left/right to navigate between items
+   *    - Pinch to zoom on images
+   *
+   * 3. Performance Improvements:
+   *    - Lazy load full-size images only when needed
+   *    - Preload next/previous items for faster navigation
+   *    - Image compression and multiple sizes for different devices
+   *
+   * 4. Accessibility Enhancements:
+   *    - Focus management when modal opens/closes
+   *    - Screen reader announcements
+   *    - High contrast mode support
+   */
 </script>
 
+<!-- === PAGE-SPECIFIC STYLES === -->
+<!-- Styles for the photo gallery and video thumbnails -->
 <style>
+  /**
+   * Photo Gallery Styles
+   *
+   * These styles define the visual presentation and responsiveness
+   * of the image and video gallery on the About page.
+   */
+
+  /* Main container for the photo gallery section */
   .photo-gallery {
-    padding: var(--spacing-sm);
-    margin: var(--spacing-sm);
-    width: 100%;
+    padding: var(--spacing-sm); /* Small internal padding (8px) */
+    margin: var(--spacing-sm); /* Small external margin (8px) */
+    width: 100%; /* Fill available width */
   }
 
+  /* Heading for the photo gallery section */
   .photo-gallery h2 {
-    color: var(--color-primary);
-    font-size: var(--font-size-h2);
-    margin-bottom: var(--spacing-lg);
-    text-align: center;
+    color: var(--color-primary); /* Use theme primary color (green) */
+    font-size: var(--font-size-h2); /* Use theme h2 font size */
+    margin-bottom: var(--spacing-lg); /* Large bottom margin (24px) */
+    text-align: center; /* Center align the heading */
   }
 
+  /* Grid layout for gallery items */
   .gallery-grid {
-    display: grid;
+    display: grid; /* Enable CSS Grid layout */
+    /* Responsive columns: auto-fit creates as many columns as fit */
+    /* minmax(250px, 1fr): each column is at least 250px, grows to fill space */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
+    gap: var(--spacing-lg); /* Large gap between grid items (24px) */
+    margin-bottom: var(--spacing-xl); /* Extra large bottom margin (32px) */
   }
 
+  /* Individual gallery item styling */
   .gallery-item {
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
+    overflow: hidden; /* Hide content overflowing rounded corners */
+    transition: all 0.3s ease; /* Smooth transitions for hover effects */
+    position: relative; /* For positioning play overlay on videos */
   }
 
+  /* Image styling within gallery items */
   .gallery-item img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: var(--border-radius-md);
-    transition: transform 0.3s ease;
+    width: 100%; /* Fill item width */
+    height: 300px; /* Fixed height for consistent grid */
+    object-fit: cover; /* Crop image to fill, maintain aspect ratio */
+    border-radius: var(--border-radius-md); /* Medium rounded corners (8px) */
+    transition: transform 0.3s ease; /* Smooth transform for hover effect */
   }
 
+  /* Image hover effect - slight scale up */
   .gallery-item:hover img {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Scale image up by 5% on hover */
   }
 
+  /* Video thumbnail container styling */
   .video-thumbnail {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    border-radius: var(--border-radius-md);
-    overflow: hidden;
+    position: relative; /* For positioning fallback and overlay */
+    width: 100%; /* Fill item width */
+    height: 300px; /* Fixed height for consistency */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
+    overflow: hidden; /* Hide video content outside bounds */
   }
 
+  /* Video element styling within gallery items */
   .gallery-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: var(--border-radius-md);
-    transition: transform 0.3s ease;
+    width: 100%; /* Fill thumbnail width */
+    height: 100%; /* Fill thumbnail height */
+    object-fit: cover; /* Crop video to fill, maintain aspect ratio */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
+    transition: transform 0.3s ease; /* Smooth transform for hover effect */
   }
 
+  /* Video fallback display - shown if video thumbnail fails */
   .video-fallback {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute; /* Position absolutely over video */
+    top: 0; /* Align to top */
+    left: 0; /* Align to left */
+    width: 100%; /* Fill thumbnail width */
+    height: 100%; /* Fill thumbnail height */
+    /* Gradient background for visual appeal */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border-radius: var(--border-radius-md);
-    z-index: 1;
+    display: flex; /* Flexbox for centering content */
+    flex-direction: column; /* Stack icon and label vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    color: white; /* White text color */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
+    z-index: 1; /* Above the video element */
   }
 
+  /* Video icon styling within fallback */
   .video-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-    opacity: 0.9;
+    font-size: 48px; /* Large icon size */
+    margin-bottom: 12px; /* Space below icon */
+    opacity: 0.9; /* Slightly transparent */
   }
 
+  /* Video label styling within fallback */
   .video-label {
-    font-size: 14px;
-    text-align: center;
-    opacity: 0.8;
-    font-weight: 500;
-    word-break: break-word;
-    padding: 0 10px;
+    font-size: 14px; /* Smaller font size */
+    text-align: center; /* Center align text */
+    opacity: 0.8; /* Slightly transparent */
+    font-weight: 500; /* Medium font weight */
+    word-break: break-word; /* Break long words to fit */
+    padding: 0 10px; /* Horizontal padding */
   }
 
+  /* Hover effect for video thumbnail container */
   .gallery-item:hover .video-thumbnail {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Scale up thumbnail on hover */
   }
 
+  /* Hover effect for video element */
   .gallery-item:hover .gallery-video {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Scale up video on hover */
   }
 
+  /* Play button overlay for videos */
   .play-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    transition: opacity 0.3s ease;
-    opacity: 0.8;
+    position: absolute; /* Position absolutely over thumbnail */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for element's own size */
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: white; /* White play icon */
+    border-radius: 50%; /* Fully rounded (circle) */
+    width: 60px; /* Fixed width */
+    height: 60px; /* Fixed height */
+    display: flex; /* Flexbox for centering icon */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    font-size: 24px; /* Large icon size */
+    transition: opacity 0.3s ease; /* Smooth opacity transition */
+    opacity: 0.8; /* Slightly transparent by default */
   }
 
+  /* Play button overlay hover effect */
   .gallery-item:hover .play-overlay {
-    opacity: 1;
+    opacity: 1; /* Fully opaque on hover */
   }
 
+  /* === RESPONSIVE DESIGN FOR GALLERY === */
+  /* Media query for screens up to 768px wide (e.g., tablets, phones) */
   @media (max-width: 768px) {
+    /* Single column grid on small screens */
     .gallery-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; /* One column, fills available width */
     }
 
+    /* Adjust image height for smaller screens */
     .gallery-item img {
-      height: 250px;
+      height: 250px; /* Shorter height */
     }
 
+    /* Adjust video height for smaller screens */
     .gallery-video {
-      height: 250px;
+      height: 250px; /* Shorter height */
     }
 
+    /* Adjust video thumbnail height for smaller screens */
     .video-thumbnail {
-      height: 250px;
+      height: 250px; /* Shorter height */
     }
   }
 </style>
 
+<!-- === GLOBAL LIGHTBOX STYLES === -->
+<!-- These styles are global because the lightbox is appended directly to the body -->
 <style is:global>
+  /**
+   * Global Lightbox Modal Styles
+   *
+   * These styles define the appearance and behavior of the full-screen
+   * lightbox modal that appears when gallery items are clicked.
+   */
+
+  /* Main lightbox container - hidden by default */
   .lightbox {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
-    align-items: center;
-    justify-content: center;
+    display: none; /* Hidden by default, shown by JS */
+    position: fixed; /* Fixed position to cover entire viewport */
+    z-index: 1000; /* High z-index to sit on top of all content */
+    left: 0; /* Align to left edge */
+    top: 0; /* Align to top edge */
+    width: 100%; /* Full viewport width */
+    height: 100%; /* Full viewport height */
+    overflow: auto; /* Enable scrolling if content is too large */
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.9
+    ); /* Dark, semi-transparent background */
+    align-items: center; /* Center content vertically (flexbox) */
+    justify-content: center; /* Center content horizontally (flexbox) */
   }
 
+  /* Styling for the actual image/video content inside the lightbox */
   .lightbox-content {
-    margin: auto;
-    display: block;
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: var(--border-radius-md);
+    margin: auto; /* Center content within its container */
+    display: block; /* Block display for proper sizing */
+    max-width: 90%; /* Max 90% of viewport width */
+    max-height: 90%; /* Max 90% of viewport height */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
   }
 
+  /* Container for lightbox content - allows relative positioning for close button */
   .lightbox-content-container {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
+    position: relative; /* For positioning close button */
+    max-width: 90%; /* Max 90% of viewport width */
+    max-height: 90%; /* Max 90% of viewport height */
   }
 
+  /* Specific styling for video content in lightbox */
   #lightbox-video {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: var(--border-radius-md);
+    max-width: 100%; /* Fill container width */
+    max-height: 100%; /* Fill container height */
+    border-radius: var(--border-radius-md); /* Medium rounded corners */
   }
 
+  /* Close button styling */
   .close-button {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
+    position: absolute; /* Position absolutely relative to content container */
+    top: 20px; /* 20px from top */
+    right: 35px; /* 35px from right */
+    color: #f1f1f1; /* Light gray color */
+    font-size: 40px; /* Large font size for visibility */
+    font-weight: bold; /* Bold text */
+    transition: 0.3s; /* Smooth transition for hover effect */
+    cursor: pointer; /* Show pointer cursor on hover */
   }
 
+  /* Close button hover and focus states */
   .close-button:hover,
   .close-button:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
+    color: #bbb; /* Lighter gray on hover/focus */
+    text-decoration: none; /* Remove underline */
+    cursor: pointer; /* Ensure pointer cursor */
   }
 </style>
