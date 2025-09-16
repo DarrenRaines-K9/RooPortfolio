@@ -1,319 +1,565 @@
-/* global.css: This file contains the global styles for the entire application,
-   including theme variables, base typography, layout for main content,
-   and styling for the header, navigation, and theme toggle. */
-/* Basic styles for light and dark mode */
+/**
+ * global.css - Global Stylesheet for the Portfolio Application
+ *
+ * This file contains all the foundational CSS rules that apply across
+ * the entire website. It defines:
+ * - CSS Custom Properties (variables) for consistent theming, spacing, and typography
+ * - Base styles for HTML elements (body, headings, links)
+ * - Layout and styling for the main content area
+ * - Styling for the header, navigation, and theme toggle
+ * - Responsive design patterns for mobile compatibility
+ * - Enhanced shadow system for depth and visual hierarchy
+ *
+ * This approach centralizes common styles, making the design system
+ * easier to manage, update, and scale.
+ */
+
+/* === THEME DEFINITIONS (CSS Custom Properties) === */
+
+/* :root pseudo-class targets the highest-level element (<html>) */
+/* This makes CSS variables globally available throughout the document */
 :root {
-  /* CSS variables for light mode theme, spacing, typography, and enhanced shadows. */
-  --color-text: #333;
-  --color-background: #fff;
-  --color-primary: #22aa07;
-  --color-accent: #1a7a06; /* A slightly darker shade for accents */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-h1: 2.5rem;
-  --font-size-h2: 2rem;
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;
-  /* Enhanced Shadow System - Light Mode */
-  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
-  --box-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.18);
-  --box-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.25);
-  --box-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
-  --box-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.35);
+  /**
+   * Light Mode Theme Variables
+   *
+   * These variables define the default color palette, spacing,
+   * typography sizes, border radii, and shadow effects for the
+   * light theme.
+   */
+  
+  /* --- Colors --- */
+  --color-text: #333;          /* Dark gray for main text */
+  --color-background: #fff;     /* White background */
+  --color-primary: #22aa07;     /* Vibrant green for primary accents */
+  --color-accent: #1a7a06;      /* Slightly darker green for secondary accents */
+  
+  /* --- Spacing Scale --- */
+  --spacing-xs: 4px;            /* Extra small spacing */
+  --spacing-sm: 8px;            /* Small spacing */
+  --spacing-md: 16px;           /* Medium spacing */
+  --spacing-lg: 24px;           /* Large spacing */
+  --spacing-xl: 32px;           /* Extra large spacing */
+  
+  /* --- Font Sizes --- */
+  --font-size-base: 1rem;       /* Base font size (16px by default) */
+  --font-size-lg: 1.25rem;      /* Large font size (20px) */
+  --font-size-xl: 1.5rem;       /* Extra large font size (24px) */
+  --font-size-h1: 2.5rem;       /* H1 heading size (40px) */
+  --font-size-h2: 2rem;         /* H2 heading size (32px) */
+  
+  /* --- Border Radii --- */
+  --border-radius-sm: 4px;      /* Small border radius */
+  --border-radius-md: 8px;      /* Medium border radius */
+  
+  /* --- Enhanced Shadow System - Light Mode --- */
+  /* Uses rgba for shadows to allow transparency and better blending */
+  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15); /* Extra small, subtle shadow */
+  --box-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.18); /* Small shadow */
+  --box-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.25); /* Medium shadow */
+  --box-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3); /* Large shadow */
+  --box-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.35); /* Extra large, prominent shadow */
 }
 
+/* html[data-theme='dark'] - Dark Mode Overrides */
+/* These styles apply when the <html> element has data-theme="dark" attribute */
 html[data-theme='dark'] {
-  /* Overrides for dark mode, adjusting text, background, primary, and accent colors. */
-  --color-text: #e0e0e0; /* Lighter text for dark background */
-  --color-background: #1a1a1a; /* Darker background */
-  --color-primary: #0bd77b;
-  --color-accent: #08a360; /* A slightly darker shade for accents in dark mode */
-  /* Enhanced Shadow System - Dark Mode (using black for better contrast) */
-  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  /**
+   * Dark Mode Theme Variables
+   *
+   * Overrides the light mode variables to provide a distinct dark theme.
+   * Colors are adjusted for better contrast and readability on dark backgrounds.
+   */
+  
+  /* --- Colors --- */
+  --color-text: #e0e0e0;       /* Lighter text for dark background */
+  --color-background: #1a1a1a; /* Dark gray background */
+  --color-primary: #0bd77b;     /* Bright green for primary accents */
+  --color-accent: #08a360;      /* Slightly darker green for secondary accents */
+  
+  /* --- Enhanced Shadow System - Dark Mode --- */
+  /* Shadows are adjusted to be more subtle and blend better on dark backgrounds */
+  --box-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4); /* Darker, more opaque shadows */
   --box-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
   --box-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.6);
   --box-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.7);
   --box-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
+/* === BASE HTML ELEMENT STYLES === */
+
 body {
-  /* Base styles for the body, including font, line height, colors, and anti-aliasing. */
-  font-family: 'Inter', sans-serif; /* Using a modern sans-serif font, assuming it will be imported later */
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-text);
-  background-color: var(--color-background);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0;
-  padding: 0; /* Remove body padding to let main element control spacing */
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /**
+   * Body Element Base Styles
+   *
+   * The <body> element represents the entire visible content of the page.
+   * These styles establish the foundational appearance and typography
+   * that will be inherited by all child elements unless overridden.
+   */
+  
+  /* Typography Foundation */
+  font-family: 'Inter', sans-serif; /* Modern, highly readable sans-serif font */
+  font-size: var(--font-size-base);  /* Base font size (1rem = 16px by default) */
+  line-height: 1.6;                  /* Comfortable line spacing for readability */
+  
+  /* Theme-Aware Colors */
+  color: var(--color-text);                    /* Text color that adapts to light/dark theme */
+  background-color: var(--color-background);   /* Background color that adapts to theme */
+  
+  /* Smooth Theme Transitions */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Animate color changes when switching themes */
+  
+  /* Reset Browser Defaults */
+  margin: 0;  /* Remove default margin that browsers add to body */
+  padding: 0; /* Remove default padding that browsers add to body */
+  
+  /* Font Rendering Optimizations */
+  text-rendering: optimizeLegibility;      /* Better text rendering, especially for ligatures */
+  -webkit-font-smoothing: antialiased;     /* Smoother font rendering on macOS/iOS */
+  -moz-osx-font-smoothing: grayscale;      /* Smoother font rendering on Firefox/macOS */
 }
 
 main {
-  /* Styling for the main content area, including layout, max-width, padding, and enhanced shadows. */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 800px; /* Adjust as needed */
-  margin: var(--spacing-xl) auto; /* Add margin on all sides and center horizontally */
-  padding: var(--spacing-xl); /* Increased padding around the content and border */
-  box-shadow: var(--box-shadow-xl); /* Strongest shadow for main content */
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-background); /* Ensure main has background for shadow */
-  border: 2px solid limegreen; /* Added lime green border as requested */
+  /**
+   * Main Content Container Styles
+   *
+   * The <main> element represents the primary content of the page.
+   * This creates a card-like container that centers the content and
+   * provides visual elevation through shadows and borders.
+   */
+  
+  /* Flexbox Layout System */
+  display: flex;              /* Enable flexbox for flexible layouts */
+  flex-direction: column;     /* Stack child elements vertically */
+  align-items: center;        /* Center children horizontally within the container */
+  justify-content: center;    /* Center children vertically (when space allows) */
+  
+  /* Content Width and Positioning */
+  max-width: 800px;                    /* Limit content width for optimal readability */
+  margin: var(--spacing-xl) auto;      /* Large vertical margin, auto horizontal for centering */
+  padding: var(--spacing-xl);          /* Large internal padding around content */
+  
+  /* Visual Enhancement */
+  box-shadow: var(--box-shadow-xl);         /* Extra large shadow for strong elevation effect */
+  border-radius: var(--border-radius-md);   /* Medium rounded corners for modern appearance */
+  background-color: var(--color-background); /* Explicit background for shadow visibility */
+  border: 2px solid limegreen;              /* Signature bright green border accent */
 }
 
 h1 {
-  /* Styling for primary headings. */
-  color: var(--color-primary);
-  font-size: var(--font-size-h1);
-  margin-bottom: var(--spacing-md);
+  /**
+   * Primary Heading (H1) Styles
+   *
+   * The <h1> element represents the main heading of a page or section.
+   * It should be prominent and clearly establish the page hierarchy.
+   */
+  color: var(--color-primary);         /* Primary theme color (green) for emphasis */
+  font-size: var(--font-size-h1);      /* Large font size (2.5rem = 40px) */
+  margin-bottom: var(--spacing-md);    /* Medium spacing below heading */
 }
 
 a {
-  /* Base styling for links. */
-  color: var(--color-primary);
-  text-decoration: none;
+  /**
+   * Link (Anchor) Base Styles
+   *
+   * The <a> element creates hyperlinks to other pages, sections, or resources.
+   * These base styles apply to all links unless specifically overridden.
+   */
+  color: var(--color-primary);    /* Primary theme color to indicate interactivity */
+  text-decoration: none;          /* Remove default underline for cleaner appearance */
 }
 
 a:hover {
-  text-decoration: underline;
+  /**
+   * Link Hover State
+   *
+   * The :hover pseudo-class activates when a user places their cursor
+   * over the link, providing immediate visual feedback for interactivity.
+   */
+  text-decoration: underline;     /* Add underline on hover for clear interaction feedback */
 }
 
-/* Navbar Styling */
-/* Styles for the main header, including layout, background, and sticky positioning. */
+/* === NAVIGATION AND HEADER STYLES === */
+
+/**
+ * Main Header Component
+ *
+ * The .main-header class styles the primary navigation bar at the top
+ * of the page. It uses modern CSS techniques including flexbox layout,
+ * sticky positioning, and backdrop-filter for a professional appearance.
+ */
 .main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-xl);
-  background-color: transparent; /* Allow Three.js canvas to show through */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle separator */
-  box-shadow: var(--box-shadow-md); /* Enhanced shadow for better depth */
-  backdrop-filter: blur(5px); /* Modern frosted glass effect */
-  -webkit-backdrop-filter: blur(5px);
-  position: sticky; /* Make header sticky */
-  top: 0;
-  z-index: 100;
+  /* Flexbox Layout for Header Elements */
+  display: flex;                    /* Enable flexbox for flexible layout */
+  justify-content: space-between;   /* Space elements to far left and right */
+  align-items: center;              /* Center elements vertically */
+  
+  /* Spacing and Visual Design */
+  padding: var(--spacing-md) var(--spacing-xl); /* Medium vertical, extra large horizontal padding */
+  background-color: transparent;    /* Transparent to show Three.js canvas behind */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border separator */
+  box-shadow: var(--box-shadow-md); /* Medium shadow for depth */
+  
+  /* Modern Glass Effect */
+  backdrop-filter: blur(5px);        /* CSS backdrop blur for frosted glass effect */
+  -webkit-backdrop-filter: blur(5px); /* Safari/WebKit browser support */
+  
+  /* Sticky Positioning */
+  position: sticky;                  /* Header stays at top when scrolling */
+  top: 0;                           /* Stick to the very top of viewport */
+  z-index: 100;                     /* High z-index to stay above other content */
 }
 
+/**
+ * Dark Mode Header Adjustments
+ *
+ * When dark mode is active, adjust the header's border and shadow
+ * for better contrast and visibility on dark backgrounds.
+ */
 html[data-theme='dark'] .main-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: var(--box-shadow-sm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for dark mode */
+  box-shadow: var(--box-shadow-sm);                   /* Smaller shadow in dark mode */
 }
 
+/**
+ * Site Title Styling
+ *
+ * The site title is typically the main heading/logo text in the header.
+ */
 .site-branding .site-title {
-  /* Styling for the site title within the header. */
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-  color: var(--color-text); /* Use theme text color */
-  text-decoration: none;
-  transition: color 0.3s ease;
+  font-size: var(--font-size-xl);   /* Extra large font size for prominence */
+  font-weight: bold;                /* Bold weight for emphasis */
+  color: var(--color-text);         /* Theme-aware text color */
+  text-decoration: none;            /* Remove link underline */
+  transition: color 0.3s ease;      /* Smooth color transition on hover */
 }
 
 .site-branding .site-title:hover {
-  color: var(--color-primary);
+  color: var(--color-primary);      /* Change to primary color on hover */
 }
 
+/**
+ * Site Logo Image Styling
+ *
+ * Controls the size and spacing of logo images in the header.
+ */
 .site-branding .site-logo {
-  height: 100px; /* Increased logo height by another 30% */
-  margin: 0; /* Reduced padding around the image to 0 */
-  padding: 0%; /* Reduced padding around the image to 0 */
+  height: 100px;  /* Large logo height for visibility */
+  margin: 0;      /* Remove all margins */
+  padding: 0;     /* Remove all padding */
 }
 
+/**
+ * Navigation List Container
+ *
+ * The main navigation uses a flexbox layout to arrange menu items
+ * horizontally across the header.
+ */
 .main-nav .nav-list {
-  /* Styling for the navigation list within the main navigation. */
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  display: flex;     /* Arrange navigation items horizontally */
+  list-style: none;  /* Remove default bullet points */
+  margin: 0;         /* Remove default list margin */
+  padding: 0;        /* Remove default list padding */
 }
 
+/**
+ * Navigation List Items
+ *
+ * Individual <li> elements in the navigation menu.
+ */
 .main-nav .nav-list li {
-  margin-right: var(--spacing-lg);
+  margin-right: var(--spacing-lg); /* Large spacing between nav items */
 }
 
 .main-nav .nav-list li:last-child {
-  margin-right: 0;
+  margin-right: 0;                  /* Remove margin from the last item */
 }
 
+/**
+ * Navigation Links
+ *
+ * Individual navigation links with hover effects and smooth transitions.
+ */
 .main-nav .nav-link {
-  /* Styling for individual navigation links. */
-  color: var(--color-text); /* Use theme text color */
-  text-decoration: none;
-  font-weight: 500;
-  padding: var(--spacing-sm) 0;
-  position: relative;
-  transition: color 0.3s ease;
+  color: var(--color-text);         /* Theme-aware text color */
+  text-decoration: none;            /* Remove link underline */
+  font-weight: 500;                 /* Medium font weight */
+  padding: var(--spacing-sm) 0;     /* Small vertical padding for click area */
+  position: relative;               /* Required for ::after pseudo-element positioning */
+  transition: color 0.3s ease;      /* Smooth color transition */
 }
 
 .main-nav .nav-link:hover {
-  color: var(--color-primary); /* Highlight on hover */
-  text-decoration: none;
+  color: var(--color-primary);      /* Primary color on hover */
+  text-decoration: none;            /* Ensure no underline appears */
 }
 
-/* Optional: Underline effect on hover */
+/**
+ * Navigation Link Underline Effect
+ *
+ * Uses the ::after pseudo-element to create an animated underline
+ * that expands from left to right when hovering over navigation links.
+ */
 .main-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: var(--color-primary);
-  transition: width 0.3s ease-out;
+  content: '';                           /* Required for pseudo-element to appear */
+  position: absolute;                    /* Position relative to the link */
+  width: 0;                             /* Start with no width */
+  height: 2px;                          /* Thin underline */
+  bottom: 0;                            /* Position at bottom of link */
+  left: 0;                              /* Start from left edge */
+  background-color: var(--color-primary); /* Primary color for underline */
+  transition: width 0.3s ease-out;      /* Smooth width animation */
 }
 
 .main-nav .nav-link:hover::after {
-  width: 100%;
+  width: 100%;                          /* Expand to full width on hover */
 }
 
+/**
+ * Navigation Actions Container
+ *
+ * Container for header action elements like theme toggle and mobile menu button.
+ */
 .nav-actions {
-  /* Container for navigation actions, such as the theme toggle and hamburger menu. */
-  display: flex;
-  align-items: center;
+  display: flex;        /* Arrange action items horizontally */
+  align-items: center;  /* Center items vertically */
 }
 
-/* Hamburger Menu Icon */
-/* Styling for the hamburger menu button, hidden by default on larger screens. */
+/* === MOBILE NAVIGATION AND RESPONSIVE DESIGN === */
+
+/**
+ * Hamburger Menu Button
+ *
+ * The hamburger menu is a three-line icon that indicates a collapsible menu.
+ * It's hidden on desktop and only appears on mobile devices as a space-saving
+ * navigation solution.
+ */
 .hamburger-menu {
-  display: none; /* Hidden by default on large screens */
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-xs);
-  margin-left: var(--spacing-md);
-  z-index: 1000; /* Ensure it's above other content */
-  border-radius: var(--border-radius-sm);
-  transition: background-color 0.3s ease;
+  display: none;                         /* Hidden by default on large screens */
+  background: none;                      /* Remove default button background */
+  border: none;                          /* Remove default button border */
+  cursor: pointer;                       /* Show pointer cursor on hover */
+  padding: var(--spacing-xs);            /* Small padding for comfortable touch target */
+  margin-left: var(--spacing-md);        /* Medium spacing from other header elements */
+  z-index: 1000;                        /* High z-index to stay above other content */
+  border-radius: var(--border-radius-sm); /* Small rounded corners */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
 }
 
 .hamburger-menu:hover {
-  background-color: rgba(var(--color-primary), 0.1); /* Subtle hover effect */
+  background-color: rgba(var(--color-primary), 0.1); /* Subtle primary color background on hover */
 }
 
+/**
+ * Focus Visible State for Accessibility
+ *
+ * The :focus-visible pseudo-class shows focus indicators only when
+ * keyboard navigation is used, improving accessibility without
+ * cluttering the interface for mouse users.
+ */
 .hamburger-menu:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-primary); /* Primary color focus outline */
+  outline-offset: 2px;                     /* Small gap between element and outline */
 }
 
+/**
+ * Hamburger Menu Bars
+ *
+ * The three horizontal bars that make up the hamburger icon.
+ * These can be animated to transform into an X or other shapes.
+ */
 .hamburger-menu .bar {
-  /* Styling for the individual bars within the hamburger menu icon. */
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: var(--color-text);
-  margin: 5px 0;
-  transition: all 0.3s ease-in-out;
+  display: block;                       /* Block display for proper stacking */
+  width: 25px;                          /* Standard hamburger width */
+  height: 3px;                          /* Thin bar height */
+  background-color: var(--color-text);  /* Theme-aware bar color */
+  margin: 5px 0;                        /* Vertical spacing between bars */
+  transition: all 0.3s ease-in-out;     /* Smooth transition for animations */
 }
 
-/* Media Query for Small Screens */
-/* Responsive adjustments for screens up to 768px wide, primarily for the navigation menu. */
+/**
+ * Mobile Responsive Design
+ *
+ * Media query for screens up to 768px wide (tablets and phones).
+ * This transforms the horizontal desktop navigation into a vertical
+ * mobile-friendly dropdown menu.
+ */
 @media (max-width: 768px) {
+  /**
+   * Mobile Navigation Container
+   *
+   * The main navigation is hidden by default on mobile and becomes
+   * a dropdown menu that appears below the header when activated.
+   */
   .main-nav {
-    display: none; /* Hide main nav by default on small screens */
-    flex-direction: column;
-    position: absolute;
-    top: 100%; /* Position below the header */
-    left: 0;
-    width: 100%;
-    background-color: var(--color-background);
-    box-shadow: var(--box-shadow-md);
-    padding: var(--spacing-md) 0;
-    border-bottom-left-radius: var(--border-radius-md);
+    display: none;                            /* Hidden by default on mobile */
+    flex-direction: column;                   /* Stack nav items vertically */
+    position: absolute;                       /* Position relative to header */
+    top: 100%;                               /* Position directly below header */
+    left: 0;                                 /* Align to left edge */
+    width: 100%;                             /* Full width of screen */
+    background-color: var(--color-background); /* Theme-aware background */
+    box-shadow: var(--box-shadow-md);        /* Medium shadow for elevation */
+    padding: var(--spacing-md) 0;            /* Medium vertical padding */
+    border-bottom-left-radius: var(--border-radius-md);  /* Rounded bottom corners */
     border-bottom-right-radius: var(--border-radius-md);
-    overflow: hidden; /* Hide content that might overflow during transition */
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    max-height: 0;
-    opacity: 0;
+    
+    /* Animation Properties */
+    overflow: hidden;                         /* Hide overflow during animation */
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out; /* Smooth show/hide */
+    max-height: 0;                           /* Start with no height */
+    opacity: 0;                              /* Start transparent */
   }
 
-  .main-nav.is-open { /* Class toggled by JavaScript */
-    max-height: 300px; /* Arbitrary max-height, adjust as needed */
-    opacity: 1;
-    display: flex; /* Ensure it's flex when open */
+  /**
+   * Open Navigation State
+   *
+   * When the .is-open class is added by JavaScript, the navigation
+   * becomes visible with smooth animations.
+   */
+  .main-nav.is-open {
+    max-height: 300px;                       /* Allow enough height for content */
+    opacity: 1;                              /* Fully opaque */
+    display: flex;                           /* Enable flex layout when open */
   }
 
-  .main-nav.is-open { /* Class toggled by JavaScript */
-    display: flex;
-  }
-
+  /**
+   * Mobile Navigation List Layout
+   *
+   * Adjusts the navigation list for vertical mobile layout.
+   */
   .main-nav .nav-list {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column;                  /* Stack items vertically */
+    align-items: center;                     /* Center items horizontally */
   }
 
+  /**
+   * Mobile Navigation List Items
+   *
+   * Adjusts spacing for mobile navigation items.
+   */
   .main-nav .nav-list li {
-    margin: var(--spacing-sm) 0;
+    margin: var(--spacing-sm) 0;             /* Small vertical margins between items */
   }
 
+  /**
+   * Show Hamburger Menu on Mobile
+   *
+   * The hamburger menu button becomes visible on mobile devices.
+   */
   .hamburger-menu {
-    display: block; /* Show hamburger on small screens */
+    display: block;                          /* Show hamburger button on mobile */
   }
 }
 
 
-/* Enhanced Container Shadow Classes */
-/* Utility classes for different container types with intensified shadows */
+/* === CONTAINER UTILITY CLASSES === */
 
+/**
+ * Container Utility Classes
+ *
+ * These are reusable CSS classes that provide consistent styling
+ * for different types of content containers throughout the application.
+ * Each class represents a different level of visual prominence and
+ * use case, creating a cohesive design system.
+ */
+
+/**
+ * Primary Container
+ *
+ * The strongest visual container, used for the most important content.
+ * Uses the largest shadow for maximum elevation effect.
+ */
 .container-primary {
-  /* Main content containers - strongest shadow */
-  box-shadow: var(--box-shadow-xl);
+  box-shadow: var(--box-shadow-xl); /* Extra large shadow for highest prominence */
 }
 
+/**
+ * Secondary Container
+ *
+ * A well-rounded container for important but secondary content.
+ * Includes full styling with background, padding, and margins.
+ */
 .container-secondary {
-  box-shadow: var(--box-shadow-lg);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-background);
-  padding: var(--spacing-lg);
-  margin: var(--spacing-lg) 0;
+  box-shadow: var(--box-shadow-lg);         /* Large shadow for strong elevation */
+  border-radius: var(--border-radius-md);   /* Medium rounded corners */
+  background-color: var(--color-background); /* Theme-aware background */
+  padding: var(--spacing-lg);               /* Large internal padding */
+  margin: var(--spacing-lg) 0;              /* Large vertical margins */
 }
 
+/**
+ * Card Container
+ *
+ * A balanced container style perfect for content cards, articles,
+ * or any content that needs moderate visual separation.
+ */
 .container-card {
-  /* Card-style containers */
-  box-shadow: var(--box-shadow-md);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-background);
-  padding: var(--spacing-md);
-  margin: var(--spacing-md) 0;
+  box-shadow: var(--box-shadow-md);         /* Medium shadow for moderate elevation */
+  border-radius: var(--border-radius-md);   /* Medium rounded corners */
+  background-color: var(--color-background); /* Theme-aware background */
+  padding: var(--spacing-md);               /* Medium internal padding */
+  margin: var(--spacing-md) 0;              /* Medium vertical margins */
 }
 
+/**
+ * Elevated Container
+ *
+ * A special highlighted container with maximum visual impact.
+ * Features a prominent border in the primary color and maximum shadows.
+ * Perfect for featured content, call-to-action sections, or important notices.
+ */
 .container-elevated {
-  /* Special highlighted containers */
-  box-shadow: var(--box-shadow-xl);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-background);
-  padding: var(--spacing-xl);
-  border: 2px solid var(--color-primary);
+  box-shadow: var(--box-shadow-xl);         /* Extra large shadow for maximum elevation */
+  border-radius: var(--border-radius-md);   /* Medium rounded corners */
+  background-color: var(--color-background); /* Theme-aware background */
+  padding: var(--spacing-xl);               /* Extra large internal padding */
+  border: 2px solid var(--color-primary);   /* Prominent primary color border */
 }
 
+/**
+ * Subtle Container
+ *
+ * A minimally styled container for content that needs just a hint
+ * of visual separation. Perfect for secondary information or
+ * content that shouldn't compete for attention.
+ */
 .container-subtle {
-  /* Minimally elevated containers */
-  box-shadow: var(--box-shadow-xs);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-background);
-  padding: var(--spacing-sm);
+  box-shadow: var(--box-shadow-xs);         /* Extra small shadow for minimal elevation */
+  border-radius: var(--border-radius-sm);   /* Small rounded corners */
+  background-color: var(--color-background); /* Theme-aware background */
+  padding: var(--spacing-sm);               /* Small internal padding */
 }
 
-/* Hover effects for interactive containers */
+/**
+ * Interactive Container Hover Effects
+ *
+ * These hover effects provide visual feedback when users interact
+ * with container elements, making the interface feel more responsive
+ * and engaging. The effects combine shadow enhancement with subtle
+ * upward movement (translateY) to create a "lifting" effect.
+ */
+
+/**
+ * Standard Container Hover Effects
+ *
+ * Applied to card and secondary containers, providing moderate
+ * visual feedback on interaction.
+ */
 .container-card:hover,
 .container-secondary:hover {
-  box-shadow: var(--box-shadow-lg);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow-lg);  /* Increase shadow on hover */
+  transform: translateY(-2px);       /* Lift element slightly upward */
+  transition: all 0.3s ease;         /* Smooth transition for all changes */
 }
 
+/**
+ * Elevated Container Hover Effect
+ *
+ * A more dramatic hover effect for the elevated container,
+ * emphasizing its special status and importance.
+ */
 .container-elevated:hover {
-  box-shadow: var(--box-shadow-xl);
-  transform: translateY(-4px);
-  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow-xl);  /* Maintain maximum shadow (already at highest level) */
+  transform: translateY(-4px);       /* More pronounced upward movement */
+  transition: all 0.3s ease;         /* Smooth transition for all changes */
 }
