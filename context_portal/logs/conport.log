@@ -144,3 +144,14 @@
 2025-09-15 18:48:18,443 - INFO - context_portal_mcp.main - Pre-warming database connection for workspace: /Users/darrenraines/👽/ROO/PortfolioRoo
 2025-09-15 18:48:18,443 - INFO - context_portal_mcp.db.database - Alembic: Script directory /Users/darrenraines/👽/ROO/PortfolioRoo/context_portal/alembic confirmed to exist by Python.
 2025-09-15 18:48:18,444 - INFO - context_portal_mcp.db.database - Running Alembic migrations for database: /Users/darrenraines/👽/ROO/PortfolioRoo/context_portal/context.db
+2025-09-15 21:15:03,082 - INFO - context_portal_mcp.main - File logging configured to: /Users/darrenraines/👽/ROO/PortfolioRoo/context_portal/./logs/conport.log
+2025-09-15 21:15:03,082 - INFO - context_portal_mcp.core.config - Database filename set to: context.db
+2025-09-15 21:15:03,082 - INFO - context_portal_mcp.main - Using database filename: context.db
+2025-09-15 21:15:03,082 - INFO - context_portal_mcp.main - Parsed CLI args: Namespace(host='127.0.0.1', port=8000, workspace_id='/Users/darrenraines/👽/ROO/PortfolioRoo', auto_detect_workspace=True, workspace_search_start=None, no_auto_detect=False, mode='stdio', log_file='./logs/conport.log', db_path=None, base_path=None, db_filename='context.db', log_level='INFO')
+2025-09-15 21:15:03,082 - INFO - context_portal_mcp.main - Starting ConPort in STDIO mode with workspace detection enabled
+2025-09-15 21:15:03,083 - INFO - context_portal_mcp.core.workspace_detector - Workspace detected by strong indicators: /Users/darrenraines/👽/ROO/PortfolioRoo
+2025-09-15 21:15:03,083 - INFO - context_portal_mcp.main - Workspace detection details: {'start_path': '/Users/darrenraines/👽/ROO/PortfolioRoo', 'detected_workspace': '/Users/darrenraines/👽/ROO/PortfolioRoo', 'context_portal_path': '/Users/darrenraines/👽/ROO/PortfolioRoo/context_portal', 'detection_method': 'strong_indicators', 'indicators_found': ['.git'], 'environment_variables': {'VSCODE_WORKSPACE_FOLDER': None, 'CONPORT_WORKSPACE': None, 'PWD': '/Users/darrenraines/👽/ROO/PortfolioRoo', 'CWD': '/Users/darrenraines/👽/ROO/PortfolioRoo'}}
+2025-09-15 21:15:03,083 - INFO - context_portal_mcp.main - Effective workspace ID: /Users/darrenraines/👽/ROO/PortfolioRoo
+2025-09-15 21:15:03,083 - INFO - context_portal_mcp.main - Pre-warming database connection for workspace: /Users/darrenraines/👽/ROO/PortfolioRoo
+2025-09-15 21:15:03,084 - INFO - context_portal_mcp.db.database - Alembic: Script directory /Users/darrenraines/👽/ROO/PortfolioRoo/context_portal/alembic confirmed to exist by Python.
+2025-09-15 21:15:03,084 - INFO - context_portal_mcp.db.database - Running Alembic migrations for database: /Users/darrenraines/👽/ROO/PortfolioRoo/context_portal/context.db
